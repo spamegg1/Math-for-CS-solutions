@@ -1,1 +1,1 @@
-# Math-for-CS-solutions
+Solutions to Problem Sets and Exams of MIT Mathematics for Computer Science 2015 (same as [2019 Open Learning Library](https://openlearninglibrary.mit.edu/courses/course-v1:OCW+6.042J+2T2019/))
