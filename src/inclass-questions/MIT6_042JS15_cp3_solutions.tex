@@ -1,0 +1,389 @@
+\documentclass[14pt]{extarticle} 
+\usepackage{amsmath,mathtools,amsfonts,amsthm,amssymb,hyperref}
+\usepackage{wasysym,geometry,bussproofs,latexsym,parskip,bookmark}
+\usepackage{mathtools}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\hypersetup{colorlinks,allcolors=blue,linktoc=all}
+\geometry{a4paper} 
+\geometry{margin=0.5in}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Wed. (Session 3)''}
+\author{https://github.com/spamegg1}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Well Ordering Proof Template}
+
+We will be using the ``Well Ordering Proof Template'' from the reading in this section:
+
+\textit{To prove that $P(n)$ is true for all $n \in \mathbb{N}$:}
+
+\textit{Define the set $C$ of counterexamples to P.}
+
+\textit{Argue by contradiction and assume $C$ is nonempty.}
+
+\textit{By the Well Ordering Principle, $C$ has a least element.}
+
+\textit{Reach a contradiction somehow. (Usually by finding another element of $C$ even smaller than the least element.)}
+
+\textit{Conclude that $C$ is empty, therefore $P(n)$ is true for all $n \in \mathbb{N}$.}
+
+\section{Problem 1}
+The proof below uses the Well Ordering Principle to prove that every amount of postage that can be assembled using only 6 cent and 15 cent stamps, is divisible by 3. Let the notation $j \mid k$ indicate that integer $j$ is a divisor of integer $k$, and let $S(n)$ mean that exactly $n$ cents postage can be assembled using only 6 and 15 cent stamps. Then the proof shows that 
+
+$S(n)$ IMPLIES $3 \mid n$ for all nonnegative integers $n$. {\bf (1)}
+
+Fill in the missing portions (indicated by “. . .”) of the following proof of (1).
+
+\begin{proof}
+{\bf Step 1.} Let $C$ be the set of {\it counterexamples} to (1), namely:
+$$
+C::= \{n \in \mathbb{N} \mid \ldots\}
+$$
+Here we are expected to fill in the triple dots.
+
+{\bf Solution to Step 1:} ``Counterexample'' means: if $n \in C$ then ``$S(n)$ implies $3 \mid n$'' must be FALSE. This means NEGATION. We can simply NEGATE the statement $S(n) \implies 3 \mid n$.
+
+How do we negate an implication of the form $A \implies B$? Remember $A \implies B$ is logically equivalent to $\neg A \vee B$.
+So
+$$
+S(n) \implies 3 \mid n 
+$$
+is equivalent to:
+$$
+(\neg S(n)) \vee (3 \mid n)
+$$
+We can negate it using De Morgan's Laws:
+$$
+\neg(S(n) \implies 3 \mid n) = \neg((\neg S(n)) \vee (3 \mid n)) = \neg(\neg S(n)) \wedge \neg(3 \mid n) = S(n) \wedge 3 \nmid n
+$$
+So we can fill the triple dots with $S(n) \wedge 3 \nmid n$:
+$$
+C::= \{n \in \mathbb{N} \mid S(n) \wedge 3 \nmid n\}
+$$
+
+{\bf Step 2.} Assume for the purpose of obtaining a contradiction that C is nonempty. Then by the WOP, there is a smallest number, $m \in C$. \textbf{This $m$ must be positive because $\ldots$}
+
+Here we are expected to fill in the triple dots. 
+
+{\bf Solution to Step 2.} We need to show that $m > 0$. In other words, we need to show that $m \neq 0$.
+
+For $0$ to be in $C$, it must be that $S(0)$ and $3 \nmid 0$. Is this true?
+
+Is $S(0)$ true? $S(0)$ says: ``exactly 0 cents postage can be assembled using 6 cents and 15 cents.'' This is true, by using zero 6 cent stamps and zero 15 cent stamps.
+
+Is $3 \nmid 0$ true? No, this is false: there exists an integer $k = 0$ such that $3k = 0$. Therefore by definition $3 \mid 0$.
+
+Since $S(0)$ is true, and $3 \nmid 0$ is false, $S(0) \wedge 3 \nmid 0$ is also false. Therefore $0$ is not a member of $C$.
+
+Therefore, we can fill in the triple dots with: \textbf{This $m$ must be positive because $3 \mid 0$ so $0 \notin C$.}
+
+{\bf Step 3.} But if $S(m)$ holds and $m$ is positive, then $S(m - 6)$ or $S(m - 15)$ must hold, because $\ldots$
+
+Here we are expected to fill in the triple dots. 
+
+{\bf Solution to Step 3.} Let's unpack $S(m)$. $S(m)$ means: ``exactly $m$ cents postage is assembled using 6 cent and 15 cent stamps.''
+
+This means there exist nonnegative integers $x$ and $y$ such that $m = 6x + 15y$. Since $m$ is positive, $x$ and $y$ cannot be both zero. At least one of them is positive.
+
+There are two cases: $x > 0$ or $y > 0$. 
+
+\textbf{Case 1.} If $x > 0$ then $x \geq 1$, so $x - 1 \geq 0$. We can write $x = (x - 1) + 1$.
+
+So $m = 6((x-1) + 1) + 15y = 6(x-1) + 6 + 15y$. Therefore $m - 6 = 6(x-1) + 15y$ where both $x-1$ and $y$ are nonnegative integers. This means that ``exactly $m-6$ cents postage can be assembled from 6 cent and 15 cent stamps''. This is the definition of $S(m-6)$. So we proved that $S(m-6)$ holds.
+
+\textbf{Case 2.} If $y > 0$ then $y \geq 1$, so $y - 1 \geq 0$. We can write $y = (y - 1) + 1$.
+
+So $m = 6x + 15((y-1) + 1) = 6x + 15(y-1) + 15$. Therefore $m - 15 = 6x + 15(y-1)$ where both $x$ and $y-1$ are nonnegative integers. This means that ``exactly $m-15$ cents postage can be assembled from 6 cent and 15 cent stamps''. This is the definition of $S(m-15)$. So we proved that $S(m-15)$ holds.
+
+So, either $S(m-6)$ holds or $S(m-15)$ holds (or possibly both). We can fill the triple dots with this long explanation.
+
+\textbf{Step 4.} So suppose $S(m-6)$ holds. Then $3 \mid (m-6)$ because $\ldots$
+
+Here we are expected to fill in the triple dots. 
+
+\textbf{Solution to Step 4.} Let's think about it. Why should $3 \mid (m-6)$ be true? If it were false, we would have $S(m-6)$ and $3 \nmid (m-6)$. Remember the definition of the set $C$ of counterexamples:
+$$
+C::= \{n \in \mathbb{N} \mid S(n) \wedge 3 \nmid n\}
+$$
+which means $m-6$ is a member of $C$, the set of counterexamples. But $m$ is the smallest member of $C$, and $m-6 < m$ and $m-6$ is a member of $C$, so this would be a contradiction!
+
+So, we can fill in the triple dots with: \textbf{if $3 \nmid (m-6)$ then $m - 6 \in C$ which contradicts the fact that $m$ is the smallest member of $C$.}
+
+{\bf Step 5.} But if $3 \mid (m-6)$ then $3 \mid m$ because $\ldots$, contradicting the fact that $m$ is a counterexample.
+
+Here we are expected to fill in the triple dots. 
+
+\textbf{Solution to Step 5.} Let's invoke the definition of divisibility! 
+
+If $3 \mid (m-6)$ then by definition there exists an integer $k$ such that $3k = m-6$. 
+
+So $3k+6= m$. Factoring out 3, we get $3(k+2) = m$. This means $3 \mid m$.
+
+So, we can fill in the triple dots with: \textbf{there exists an integer $k$ such that $3k = m-6$, so $3(k+2) = m$.}
+
+\textbf{Step 6.} Next, if $S(m-15)$ holds. We arrive at a contradiction the same way. Since we get a contradiction in both cases, we conclude that $\ldots$ which proves that \textbf{(1)} holds.
+
+Here we are expected to fill in the triple dots. 
+
+\textbf{Solution to Step 6.} We can fill in the triple dots with: \textbf{$C$ must be empty.}
+\end{proof}
+
+\section{Problem 2.}
+Use the Well Ordering Principle to prove that:
+$$
+\sum_{k=0}^{n}k^2 = \frac{n(n+1)(2n+1)}{6}
+$$
+\begin{proof}
+Prof. Meyer has a proof that is almost exactly like this one in the text. We can simply follow that:
+
+1. For a nonnegative integer $n \in \mathbb{N}$, define $S(n)$ to be the statement: 
+$$
+S(n) ::= \sum_{k=0}^{n}k^2 = \frac{n(n+1)(2n+1)}{6}
+$$
+
+2. Define $C$ to be the set of nonnegative numbers $n$ for which $S(n)$ is false:
+$$
+C::= \left\{n \in \mathbb{N}\,\,\,\, \biggr\vert \,\,\,\, \sum_{k=0}^{n}k^2 \neq \frac{n(n+1)(2n+1)}{6}\right\}
+$$
+
+3. Argue by contradiction and assume $C$ is not empty.
+
+4. By the Well Ordering Principle there exists $m \in C$ that is the smallest element of $C$. So, $S(m)$ is false, and for any nonnegative integer $k < m$, $S(k)$ is true. 
+
+5. First we need to prove that $m \neq 0$. We can do this by showing $S(0)$ is true. When $n = 0$, the left hand side of the equation becomes:
+$$
+\sum_{k=0}^{0}k^2 = 0^2 = 0
+$$
+because the summation has exactly one term in it, for $k = 0$ (the summation starts at index 0 and ends at index 0). This is explained by Prof. Meyer in the textbook as ``a couple of special ambiguous cases''.
+
+And when $n = 0$, the right side of the equation becomes:
+$$
+\frac{0(0+1)(2\cdot0+1)}{6} = 0
+$$
+So we can see that 
+$$
+S(0) ::= \sum_{k=0}^{0}k^2 = \frac{0(0+1)(2\cdot0+1)}{6}
+$$
+is true! Since $S(m)$ is false and $S(0)$ is true, $m \neq 0$. Therefore $m > 0$.
+
+6. Since $m > 0$, $m-1$ is a nonnegative number. Since $m$ is the smallest element of $C$ and $m-1 < m$, $S(m-1)$ must be true. So we have:
+$$
+\sum_{k=0}^{m-1}k^2 = \frac{(m-1)(m-1+1)(2(m-1)+1)}{6} = \frac{(m-1)m(2m-1)}{6}
+$$
+
+7. Now we look at the whole sum up to and including the index $m$, and split it into two parts: the sum up to and including index $m-1$, and the last ($m$th) term:
+
+\begin{align}
+\sum_{k=0}^{m}k^2 &= \left(\sum_{k=0}^{m-1}k^2\right) + m^2 & \text{by definition of summation}\\
+&= \frac{(m-1)m(2m-1)}{6} + m^2 & \text{by Step 6}\\
+&= \frac{(m^2-m)(2m-1)}{6} + m^2 & \text{by algebra}\\
+&= \frac{2m^3-2m^2-m^2+m}{6} + m^2 & \text{by algebra}\\
+&= \frac{2m^3-3m^2+m}{6} + \frac{6m^2}{6} & \text{by algebra}\\
+&= \frac{2m^3+3m^2+m}{6} & \text{by algebra}\\
+&= \frac{m(2m^2+3m+1)}{6} & \text{by algebra}\\
+&= \frac{m(m+1)(2m+1)}{6} & \text{by algebra}
+\end{align}
+
+Therefore $S(m)$ is true, which is a contradiction!
+
+8. Therefore our initial assumption was false, and $C$ must be empty. This proves that $S(n)$ holds for all nonnegative integers $n$.
+\end{proof}
+
+\textbf{Comment:} This proof is actually almost exactly the same as an Induction proof (which we will learn in a later section), but the argumentation is done ``backwards'' by contradiction here (WOP), instead of a non-contradiction direct proof (Induction).
+
+Induction proof would go like this: first prove $S(0)$. Then assume $S(m-1)$ is true, prove $S(m)$ is true.
+
+The WOP proof goes like: assume $S(m)$ is false and $m$ is minimal; first show $m \neq 0$ (by showing $S(0)$). Now $S(m-1)$ is true, use that to prove $S(m)$, which is a contradiction!
+
+Pretty silly isn't it?
+
+\section{Problem 3.} 
+
+Prove that \textit{Lehman's equation}
+$$
+8a^4 + 4b^4 + 2c^4 = d^4 \,\,\,\,\,\,(*)
+$$
+does not have any positive integer solutions.
+
+Hint: consider the minimum value of $a$ among all possible solutions to $(*)$.
+
+\begin{proof}
+We will follow the WOP proof recipe.
+
+1. Argue by contradiction and assume that there exists an all positive integer solution to $(*)$.
+
+2. Let $C$ be the set of positive integers $a$ where $(a, b, c, d)$ are all possible positive integer solutions to (*). 
+
+In other words, an integer $a$ is a member of $C$ if and only if $a > 0$ and there exist positive integers $b, c, d$ such that $a, b, c, d$ make up a solution to $(*)$:
+$$
+C::=\{a \in \mathbb{Z}^+ \,\,\, \mid \,\,\, \exists b, c, d \in \mathbb{Z}^+(8a^4 + 4b^4 + 2c^4 = d^4)\}
+$$
+3. By our assumption in (1), $C$ is not empty.
+
+4. By the WOP, $C$ has a smallest element $m$. \textit{Remember $m$ goes in place of $a$ in $(*)$.} This means there exist positive integers $b, c, d$ such that $8m^4 + 4b^4 + 2c^4 = d^4$.
+
+5. We observe that the left hand side is divisible by 2 because:
+$$
+8m^4 + 4b^4 + 2c^4 = 2(4m^4 + 2b^4 + c^4) 
+$$
+6. Therefore the right hand side $d^4$ must be divisible by 2.
+
+7. Remember earlier in the course we proved that: \textbf{if $n^2$ is divisible by 2, then $n$ is divisible by 2.} 
+
+8. Since $d^4 = (d^2)^2$, by (6) and (7) we conclude that $d^2$ is divisible by 2. Once again by (7), we conclude that $d$ is divisible by 2.
+
+9. By definition of divisibility there exists an integer $z$ such that $d = 2z$. Since $d > 0$ it must be that $z > 0$.
+
+10. Therefore $8m^4 + 4b^4 + 2c^4 = (2z)^4 = 16z^4$.
+
+11. Dividing by 2 we get $4m^4 + 2b^4 + c^4 = 8z^4$.
+
+12. Moving terms, we get $c^4 = 8z^4 - 4m^4 - 2b^4$.
+
+13. By a similar argument, we see that the RHS is divisible by 2, so the LHS $c^4$ must be divisible by 2. Once again by a repeated application of (7) we conclude that $c$ must be divisible by 2.
+
+14. By definition of divisibility there exists an integer $y$ such that $c = 2y$. Since $c > 0$ it must be that $y > 0$.
+
+15. Substituting into (12) we get $16y^4 = 8z^4 - 4m^4 - 2b^4$.
+
+16. Dividing by 2 we get $8y^4 = 4z^4 - 2m^4 - b^4$.
+
+17. Moving terms, we get $-8y^4 + 4z^4 - 2m^4 = b^4$.
+
+18. Similarly we see that the LHS is divisible by 2, hence the RHS $b^4$ must be divisible by 2. Once again by a repeated application of (7) we see that $b$ must be divisible by 2.
+
+19. By definition of divisibility there exists an integer $x$ such that $b = 2x$. Since $b > 0$ it must be that $x > 0$.
+
+20. Substituting into (17) we get $-8y^4 + 4z^4 - 2m^4 = (2x)^4 = 16x^4$.
+
+21. Dividing by 2 we get $-4y^4 + 2z^4 - m^4 = 8x^4$.
+
+22. Moving terms, we get $-4y^4 + 2z^4 - 8x^4 = m^4$.
+
+23. By a similar argument we see that the LHS is divisible by 2, so the RHS $m^4$ is divisible by 2. Once again by a repeated application of (7) we see that $m$ is divisible by 2.
+
+24. By definition of divisibility, there exists an integer $w$ such that $m = 2w$. Since $m > 0$ it must be that $w > 0$. 
+
+25. Substituting into (22) we get $-4y^4 + 2z^4 - 8x^4 = 16w^4$.
+
+26. Dividing by 2 we get $-2y^4 + z^4 - 4x^4 = 8w^4$.
+
+27. Moving terms, we get $8w^4 + 4x^4 + 2y^4 = z^4$.
+
+28. So we obtained an all positive solution $(w, x, y, z)$ to $(*)$ where $w < m$, which is a contradiction!
+
+29. Therefore our initial assumption was false, and $(*)$ has no all positive integer solutions.
+\end{proof}
+
+\section{Problem 4.}
+
+You are given a series of envelopes, respectively containing $1, 2, 4, \ldots, 2^m$ dollars. Define:
+
+\textbf{Property $m$}: For any nonnegative integer less than $2^{m+1}$, there is a selection of envelopes whose contents add up to exactly that number of dollars.
+
+Use the Well Ordering Principle (WOP) to prove that Property $m$ holds for all nonnegative integers $m$.
+
+HINT: Consider two cases: first, when the target number of dollars is less than $2^m$ and second, when the target is at least $2^m$.
+
+\begin{proof}
+1. Argue by contradiction and assume that there exists a nonnegative integer $m$ for which Property $m$ does not hold.
+
+2. Define $C ::= \{m \in \mathbb{N} \,\,\,\mid\,\,\, \neg\text{ Property }m\}$.
+
+3. By (1), $C$ is not empty.
+
+4. By the WOP, $C$ has a least element $m$. So Property $m$ is false, but for all nonnegative integers $n < m$, Property $n$ is true.
+
+5. Notice that Property $0$ is true: it says that 
+
+``For any nonnegative integer less than $2^{0+1} = 2$, there is a selection of envelopes whose contents add up to exactly that number of dollars.'' 
+
+The only nonnegative integers less than 2 are 0 and 1. 
+
+For $\$0$ we can use NO ENVELOPES, and for $\$1$ we can use one envelope containing 1 dollar. So Property $0$ is true.
+
+6. By (5) we can see $m \neq 0$. So $m \geq 1$ and $m - 1$ is a nonnegative integer less than $m$. So by (4) Property $m-1$ is true. This means that:
+ 
+``For any nonnegative integer less than $2^{m-1+1} = 2^m$, there is a selection of envelopes whose contents add up to exactly that number of dollars.''
+
+7. We want to prove that Property $m$ is true and derive a contradiction. Property $m$ says: 
+
+``For any nonnegative integer less than $2^{m+1}$, there is a selection of envelopes (containing $1, 2, 4, \ldots, 2^m$ dollars) whose contents add up to exactly that number of dollars.'' 
+
+8. Assume $n$ is a nonnegative integer less than $2^{m+1}$. We want to show that there is a selection of envelopes whose contents add up to exactly $n$ dollars.
+
+9. \textbf{Case 1.} $n < 2^m$. 
+
+9.1. By (6) there is a selection of envelopes (containing $1, 2, 4, \ldots, 2^{m-1}$ dollars) whose contents add up to exactly $n$ dollars. So Property $m$ holds in this case.
+
+10. \textbf{Case 2.} $2^m \leq n < 2^{m+1}$. 
+
+10.1. Subtract $2^m$ from all sides to get: $0 \leq n - 2^m < 2^{m+1} - 2^m$.
+
+10.2. Notice that $2^{m+1} - 2^m = 2^m\cdot 2^1 - 2^m = 2^m(2-1) = 2^m$.
+
+10.3. This means that $0 \leq n - 2^m < 2^m$.
+
+10.4. By (6) there is a selection of envelopes (containing $1, 2, 4, \ldots, 2^{m-1}$ dollars) whose contents add up to exactly $n - 2^m$ dollars.
+
+10.5. To that selection, we can add ONE envelope that contains $2^m$ dollars, and we obtain a selection of envelopes (containing $1, 2, 4, \ldots, 2^{m-1}, 2^m$ dollars) whose contents add up to exactly $n$ dollars.
+
+So Property $m$ holds in this case too.
+
+11. Therefore we just proved that Property $m$ is true, which is a contradiction!
+
+12. So our initial assumption was false, therefore Property $m$ holds for all nonnegative integers $m$.
+\end{proof}
+
+\section{Problem 5.} Use the Well Ordering Principle to prove that any integer greater than or equal to 30 can be represented as the sum of nonnegative integer multiples of 6, 10, and 15.
+
+Hint: Verify that integers in the interval $[30..35]$ are sums of nonnegative integer multiples of 6, 10, and 15.
+
+\begin{proof}
+1. Let's first follow the hint: $30 = 15 + 15$, $31 = 6 + 10 + 15$, $32 = 6 + 6 + 10 + 10$, $33 = 6 + 6 + 6 + 15$, $34 = 6 + 6 + 6 + 6 + 10$, $35 = 10 + 10 + 15$.
+
+2. For the sake of simplicity, for integers $n \geq 30$ let's define $P(n) ::=$ ``$n$ can be represented as the sum of nonnegative integer multiples of 6, 10, and 15.'' 
+
+3. Argue by contradiction and assume that there exists an integer $n \geq 30$ for which $P(n)$ is false.
+
+4. Define the set $C ::= \{n \in \mathbb{N} \,\,\,\mid\,\,\, n \geq 30 \wedge \neg P(n)\}$.
+
+5. By (3) $C$ is nonempty.
+
+6. By the WOP, $C$ has a smallest element $m$. So $P(m)$ is false but for all $n$ that satisfies $30 \leq n < m$, $P(n)$ is true.
+
+7. By (1) we know that $m$ cannot be 30, 31, 32, 33, 34 or 35. So $m \geq 36$.
+
+8. By the Quotient-Remainder Theorem, there exist integers $q, r$ such that $m = 6q + r$ where $0 \leq r < 6$. Since $m \geq 36$ we see that $q \geq 6$. There are 6 cases depending on $r$.
+
+9. \textbf{Case 1: r = 0.} Then $m = 6q$ so $m$ can be represented as a nonnegative multiple of 6. So $P(m)$ is true.
+
+10. \textbf{Case 2: r = 1.} Then $m = 6q + 1$ so $m - 31 = 6q - 30 = 6(q - 5)$. 
+
+So $m = 6(q - 5) + 31 = 6(q - 5) + 6 + 10 + 15 = 6(q - 4) + 10 + 15$. Since $q \geq 6$ we see $q - 4 \geq 2$, so $m$ can be represented as a sum of nonnegative integer multiples of 6, 10, 15, so $P(m)$ is true.
+
+11. \textbf{Case 3: r = 2.} Then $m = 6q + 2$ so $m - 32 = 6q - 30 = 6(q - 5)$. 
+
+So $m = 6(q - 5) + 32 = 6(q - 5) + 6 + 6 + 10 + 10 = 6(q - 3) + 10 + 10$. Since $q \geq 6$ we see $q - 3 \geq 3$, so $m$ can be represented as a sum of nonnegative integer multiples of 6, 10, 15, so $P(m)$ is true.
+
+12. \textbf{Case 4: r = 3.} Then $m = 6q + 3$ so $m - 33 = 6q - 30 = 6(q - 5)$. 
+
+So $m = 6(q - 5) + 33 = 6(q - 5) + 6 + 6 + 6 + 15 = 6(q - 2) + 15$. Since $q \geq 6$ we see $q - 2 \geq 4$, so $m$ can be represented as a sum of nonnegative integer multiples of 6, 10, 15, so $P(m)$ is true.
+
+13. \textbf{Case 5: r = 4.} Then $m = 6q + 4$ so $m - 34 = 6q - 30 = 6(q - 5)$. 
+
+So $m = 6(q - 5) + 34 = 6(q - 5) + 6 + 6 + 6 + 6 + 10 = 6(q - 1) + 10$. Since $q \geq 6$ we see $q - 1 \geq 5$, so $m$ can be represented as a sum of nonnegative integer multiples of 6, 10, 15, so $P(m)$ is true.
+
+14. \textbf{Case 6: r = 5.} Then $m = 6q + 5$ so $m - 35 = 6q - 30 = 6(q - 5)$. 
+
+So $m = 6(q - 5) + 35 = 6(q - 5) + 10 + 10 + 15$. Since $q \geq 6$ we see $q - 5 \geq 1$, so $m$ can be represented as a sum of nonnegative integer multiples of 6, 10, 15, so $P(m)$ is true.
+
+15. In every case $P(m)$ is true, a contradiction!
+
+16. So our initial assumption must be false, therefore $P(n)$ is true for all $n \geq 30$.
+\end{proof}
+\end{document}
