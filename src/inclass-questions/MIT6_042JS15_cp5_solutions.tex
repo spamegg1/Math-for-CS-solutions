@@ -1,0 +1,252 @@
+\documentclass[14pt]{extarticle} 
+\usepackage{amsmath,mathtools,amsfonts,amsthm,amssymb,hyperref}
+\usepackage{wasysym,geometry,bussproofs,latexsym,parskip,bookmark}
+\usepackage{mathtools}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\hypersetup{colorlinks,allcolors=blue,linktoc=all}
+\geometry{a4paper} 
+\geometry{margin=0.5in}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 3, Tue. (Session 5)''}
+\author{https://github.com/spamegg1}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Problem 1}
+For each of the logical formulas, indicate whether or not it is true when the domain of discourse is $\mathbb{N}$ (the nonnegative integers $0, 1, 2, \ldots$), $\mathbb{Z}$ (the integers), $\mathbb{Q}$ (the rationals), $\mathbb{R}$ (the real numbers), and $\mathbb{C}$ (the complex numbers). Add a brief explanation to the few cases that merit one.
+
+\subsection{(a)}
+$\exists x(x^2 = 2)$ 
+\begin{proof}
+Not true in $\mathbb{N}$, $\mathbb{Z}$ or in $\mathbb{Q}$ because $\sqrt{2}$ is irrational.
+
+True in $\mathbb{R}$ and $\mathbb{C}$ because $\sqrt{2} \in \mathbb{R}$ and $\mathbb{R}$ is a subset of $\mathbb{C}$.
+\end{proof}
+
+\subsection{(b)}
+$\forall x \exists y (x^2 = y)$
+\begin{proof}
+True in all 5 domains. Basically it states that ``this domain is closed under the operation of taking the square of a number.'' The square of a nonnegative integer is a nonnegative integer, the square of an integer is an integer, the square of a rational number is a rational number... and so on.
+\end{proof}
+
+\subsection{(c)}
+$\forall y \exists x (x^2 = y)$
+\begin{proof}
+This one states the existence of square roots for all numbers in the domain. Only true in $\mathbb{C}$ and false in the other 4 domains. 
+
+For $\mathbb{N}$, $\mathbb{Z}$ and $\mathbb{Q}$, let $y = 2$ which is a member of all 3 domains, but $x = \pm \sqrt{2}$ are not members of any of the 3 domains.
+
+For $\mathbb{R}$, let $y = -1$ which does not have a real square root.
+\end{proof}
+
+\subsection{(d)}
+$\forall x \neq 0 \,\,\exists y (xy = 1) $
+\begin{proof}
+This means that every nonzero member of the domain has a multiplicative inverse. 
+
+True in $\mathbb{Q}$, $\mathbb{R}$ and $\mathbb{C}$: for all $x$ in one of these domains, $y = 1/x$ also exists in that domain. 
+
+But false in $\mathbb{N}$ and $\mathbb{Z}$: let $x = 2$ which is a member of these two domains, but $y = 1/2$ is not in these two domains.
+\end{proof}
+
+\subsection{(e)}
+$\exists x \exists y (x + 2y = 2 \text{ AND } 2x + 4y = 5)$
+\begin{proof}
+False in all 5 domains.
+
+This is a system of linear equations. If we multiply the second equation by 2 we get $2x + 4y = 4$. So $2x + 4y$ has to be simultaneously equal to 4 and equal to 5, which is impossible. So there exist no such $x, y$ in {\it any domain}.
+\end{proof}
+
+\section{Problem 2}
+The goal of this problem is to translate some assertions about binary strings into logic notation. The domain of discourse is the set of all finite-length binary strings: $\lambda, 0, 1, 00, 01, 10, 11, 000, 001, \ldots$ (Here $\lambda$ denotes the empty string.) In your translations, you may use all the ordinary logic symbols (including $=$), variables, and the binary symbols 0, 1 denoting 0, 1.
+
+A string like $01x0y$ of binary symbols and variables denotes the concatenation of the symbols and the binary strings represented by the variables. For example, if the value of $x$ is $011$ and the value of $y$ is $1111$, then the value of $01x0y$ is the binary string $0101101111$.
+
+Here are some examples of formulas and their English translations. Names for these predicates are listed in the third column so that you can reuse them in your solutions (as we do in the definition of the predicate NO-1s below).
+$$
+\begin{array}{|l|c|l|}
+\text{Meaning} & \text{Formula} & \text{Name}\\
+\hline
+x \text{ is a prefix of } y & \exists z(xz = y) & \text{PREFIX}(x, y)\\
+x \text{ is a substring of } y & \exists u \exists v(uxv = y) & \text{SUBSTRING}(x, y)\\
+x \text{ is empty or a string of } 0 \text{s} & \text{NOT(SUBSTRING}(1,x)) & \text{NO-1s}(x)
+\end{array}
+$$
+
+\subsection{(a)}
+$x$ consists of three copies of some string.
+\begin{proof}
+$\exists u (uuu = x)$
+\end{proof}
+
+\subsection{(b)}
+$x$ is an even-length string of 0’s.
+\begin{proof}
+NO-1s$(x)$ AND $\exists y (yy = x)$
+\end{proof}
+
+\subsection{(c)}
+$x$ does not contain both a 0 and a 1.
+\begin{proof}
+NOT(SUBSTRING$(0,x)$ AND SUBSTRING$(1, x)$)
+\end{proof}
+
+\subsection{(d)}
+$x$ is the binary representation of $2^k + 1$ for some integer $k \geq 0$.
+\begin{proof}
+$\exists y ((1y1 = x)$ AND NO-1s$(y)$)
+\end{proof}
+
+\subsection{(e)}
+An elegant, slightly trickier way to define NO-1s$(x)$ is:
+
+\begin{center}
+PREFIX$(x, 0x)$ (*)
+\end{center}
+
+Explain why (*) is true only when $x$ is a string of 0’s.
+\begin{proof}
+First we need to argue that when $x$ contains no 1s, then (*) is true. Indeed, assume $x$ is a string consisting of $n$ 0s. Then $0x$ is a string consisting of $n+1$ 0s. So $x$ is a prefix of $0x$.
+
+Now we need to argue that if $x$ contains a 1, then (*) is false. Assume that $x$ contains a 1. Let $n$ be the first digit from the left where a 1 occurs in $x$. In other words, from the left to the right, $x$ starts out with $n - 1$ 0s, followed by a 1, followed by other digits:
+$$
+x = 00 \ldots 001 \ldots \text{   (the 1 occurs at the $n$th place)}
+$$
+Now the string $0x$ starts with $n$ 0s, followed by a 1:
+$$
+0x = 000 \ldots 001 \ldots \text{   (the 1 occurs at the $n+1$st place)}
+$$
+Therefore $x$ cannot be a prefix of $0x$, otherwise $0x$ would have a 1 in the $n$th place, which it does not.
+\end{proof}
+
+\section{Problem 3}
+Translate the following sentence into a predicate formula:
+
+There is a student who has e-mailed at most two other people in the class, besides possibly himself.
+
+The domain of discourse should be the set of students in the class; in addition, the only predicates that you may use are: equality, and $E(x, y)$ meaning that “$x$ has sent e-mail to $y$.”
+\begin{proof}
+Using $\wedge$ for AND, $\vee$ for OR, $\rightarrow$ for IMPLIES:
+
+$\exists s \exists x \exists y (x \neq s \wedge y \neq s \wedge \forall z(E(s, z) \rightarrow (z = s \vee z = x \vee z = y)))$
+\end{proof}
+
+\section{Problem 4}
+Provide a counter model for the implication that is not valid. Informally explain why the other one is valid.
+
+\subsection{(a)}
+$\forall x \exists y P(x, y)$ IMPLIES $\exists y \forall x P(x, y)$
+\begin{proof}
+Define the domain to be the integers $\mathbb{Z}$. Define the predicate $P$ to mean: $P(x, y)$ iff $x < y$.
+
+Notice that $\forall x \exists y P(x, y)$ is true. For every integer $x$, there is another integer $y$ that is strictly bigger than $x$ (just take $y = x+1$).
+
+However the converse $\exists y \forall x P(x, y)$ is false, because it states that there exists one specific integer $y$ that's bigger than all other integers.
+\end{proof}
+
+\subsection{(b)}
+$\exists y \forall x P(x, y)$ IMPLIES $\forall x \exists y P(x, y)$
+\begin{proof}
+This implication is valid, let's prove it.
+
+1. Assume $\exists y \forall x P(x, y)$ is true. 
+
+2. Want to prove: $\forall x \exists y P(x, y)$.
+
+3. To prove (2), assume $x_0$ is an arbitrarily chosed but fixed element in the domain. We want to show $\exists y P(x_0, y)$.
+
+4. By (1) there exists a fixed element $y_0$ in the domain such that $\forall x P(x, y_0)$ is true.
+
+5. By (4) $P(x_0, y_0)$ is true.
+
+6. By (5) $\exists y P(x_0, y)$ is true.
+
+7. Since $x_0$ was arbitrarily chosen, by (6) we have $\forall x \exists y P(x, y)$ is true.
+\end{proof}
+
+\section{Problem 5 (Supplemental Problem)}
+A certain cabal within the Math for Computer Science course staff is plotting to make the final exam ridiculously hard. (“Problem 1. Prove the Poincare Conjecture starting from the axioms of ZFC. Express your answer in khipu—the knot language of the Incas.”) The only way to stop their evil plan is to determine exactly who is in the cabal. The course staff consists of seven people:
+
+\begin{center}
+$\{$Adam, Tom, Albert, Annie, Ben, Elizabeth, Siggig$\}$
+\end{center}
+
+The cabal is a subset of these seven. A membership roster has been found and appears below, but it is deviously encrypted in logic notation. The predicate cabal indicates who is in the cabal; that is, cabal$(x)$ is true if and only if $x$ is a member. Translate each statement below into English and deduce who is in the cabal.
+
+\subsection{(a)}
+$\exists x \exists y \exists z(x \neq y$ AND $x \neq z$ AND $y \neq z$ AND cabal$(x)$ AND cabal$(y)$ AND cabal$(z))$
+\begin{proof}
+There are (at least) 3 different people, who are all members of the cabal.
+\end{proof}
+\subsection{(b)}
+NOT(cabal(Siggi) AND cabal(Annie))
+\begin{proof}
+Siggi and Annie are not both in the cabal. 
+\end{proof}
+\subsection{(c)}
+cabal(Elizabeth) IMPLIES $\forall x$ cabal$(x)$
+\begin{proof}
+If Elizabeth is in the cabal, then so is everyone else (all 7).
+\end{proof}
+\subsection{(d)}
+cabal(Annie) IMPLIES cabal(Siggi)
+\begin{proof}
+If Annie is in the cabal, then so is Siggi.
+\end{proof}
+\subsection{(e)}
+(cabal(Ben) OR cabal(Albert)) IMPLIES NOT(cabal(Tom))
+\begin{proof}
+If either Ben or Albert is in the cabal, then Tom isn't.
+\end{proof}
+\subsection{(f)}
+(cabal(Ben) OR cabal(Siggi)) IMPLIES NOT(cabal(Adam))
+\begin{proof}
+If either Ben or Siggi is in the cabal, then Adam isn't.
+\end{proof}
+\subsection{(g)}
+Now use these facts to explain exactly who is on the cabal and why.
+\begin{proof}
+1. By (b), we know that there is at least 1 person in the domain who is NOT in the cabal.
+
+2. By (1), not everyone is in the cabal.
+
+3. By (2) and (c), Elizabeth cannot be in the cabal. (If Elizabeth is in the cabal, then everyone has to be in the cabal, which contradicts (2).)
+
+4. By (d) and (b), Annie cannot be in the cabal. (If Annie is in the cabal, then by (d) Siggie would be in the cabal too, but they can't be both in the cabal because of (b).)
+
+5. Now let's argue by cases:
+
+6. Case 1: Ben is in the cabal.
+
+6.1. By (e) and (6), Tom is not in the cabal.
+
+6.2. By (e) and (6), Adam is not in the cabal.
+
+6.3. So in this case, Elizabeth, Annie, Tom and Adam are not in the cabal. So the remaining 3 people Ben, Albert, Siggie must be in the cabal by (a).
+
+7. Case 2: Ben is not in the cabal. (So now 3 people: Ben, Elizabeth, Annie are not in the cabal. We need to check the remaining 4 people Adam, Tom, Albert, Siggi.)
+
+7.1. Subcase 2.1: Albert is in the cabal.
+
+7.1.1. By (e) and (7.1), Tom is not in the cabal.
+
+7.1.2. Now we are left with 3 people: Siggi, Albert, Adam. By (a) they must be all members of the cabal.
+
+7.1.3. Since Siggi is in the cabal, by (f) Adam is not in the cabal, which is a contradiction! Therefore Subcase 2.1 is not possible.
+
+7.2. Subcase 2.2: Albert is not in the cabal. 
+
+7.2.1. So now 4 people: Ben, Albert, Elizabeth, Annie are not in the cabal. 
+
+7.2.2. By (a), the remaining 3 people: Siggi, Tom, Adam must be in the cabal.
+
+7.2.3. Once again, since Siggi is in the cabal, by (f) Adam is not in the cabal, which is a contradiction! Therefore Subcase 2.2 is also not possible.
+
+7.3. By (7.1.3) and (7.2.3) we see that Case 2 leads to a contradiction, so it's impossible.
+
+8. Therefore the only possible conclusion is the one at the end of Case 1: Ben, Albert, Siggie are in the cabal and nobody else.
+\end{proof}
+\end{document}
