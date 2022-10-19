@@ -1,0 +1,239 @@
+\documentclass[14pt]{extarticle} 
+\usepackage{amsmath,mathtools,amsfonts,amsthm,amssymb,hyperref}
+\usepackage{wasysym,geometry,bussproofs,latexsym,parskip,bookmark}
+\usepackage{mathtools}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\hypersetup{colorlinks,allcolors=blue,linktoc=all}
+\geometry{a4paper} 
+\geometry{margin=0.5in}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 3, Wed. (Session 6)''}
+\author{https://github.com/spamegg1}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Problem 1}
+\subsection{(a)}
+Verify that the propositional formula ($P$ AND $\overline{Q}$) OR ($P$ AND $Q$) is equivalent to $P$.
+\begin{proof}
+There is a simple verification by truth table with 4 rows which we omit.
+
+There is also a simple cases argument: if $Q$ is T, then the formula simplifies to 
+$$
+(P \text{ AND F}) \text{ OR } (P \text{ AND T})
+$$
+which further simplifies to 
+$$
+\text{F OR } (P \text{ AND } T)
+$$
+which is $P$ AND T, which is equivalent to $P$.
+
+Otherwise, if $Q$ is F, then the formula simplifies to 
+$$
+(P \text{ AND } T) \text{ OR } (P \text{ AND } F)
+$$ 
+which is 
+$$
+(P \text{ AND } T) \text{ OR } F
+$$
+which is $P$ AND T, which is likewise equivalent to $P$.
+\end{proof}
+
+\subsection{(b)}
+The set difference, $A - B$, of sets $A$ and $B$ is defined as:
+$$
+A - B \Coloneqq \{a \in A \,\, | \,\, a \notin B\}
+$$
+
+Prove that
+$$
+A = (A - B) \cup (A \cap B)
+$$
+for all sets $A, B$, by showing
+$$
+x \in A \text{ IFF } x \in (A - B) \cup (A \cap B)
+$$
+for all elements $x$, using the equivalence of part (a) in a chain of IFF’s.
+\begin{proof}
+Let $P$ be: $x \in A$ and let $Q$ be: $x \in B$. Then:
+\begin{align*}
+x & \in (A - B) \cup (A \cap B) &  & \\
+\text{iff } & x \in (A - B) \text{ OR } (A \cap B) & \text{(by definition of } \cup)\\
+\text{iff } & (x \in A \text{ AND NOT}(x \in B)) \text{ OR } (x \in A \text{ AND } x \in B) & \text{(by definition of } -, \cap) \\
+\text{iff } & (P \text{ AND NOT}(Q)) \text{ OR } (P \text{ AND } Q) & \text{(by rewriting)} \\
+\text{iff } & P & \text{(by part (a))} \\
+\text{iff } & x \in A & \text{(by rewriting)} \\
+\end{align*}
+\end{proof}
+
+\section{Problem 2}
+A formula of set theory is a predicate formula that only uses the predicate ``$x \in y$”. The domain of discourse is the collection of sets, and ``$x \in y$” is interpreted to mean the set $x$ is one of the elements in the set $y$.
+
+For example, since $x$ and $y$ are the same set iff they have the same members, here’s how we can express equality of $x$ and $y$ with a formula of set theory:
+$$
+(x = y) \Coloneqq \forall z(z \in x \text{ IFF } z \in y)
+$$
+Express each of the following assertions about sets by a formula of set theory.
+\subsection{(a)}
+$x = \emptyset$
+\begin{proof}
+$(x = \emptyset) \Coloneqq \forall z (z \notin x)$
+\end{proof}
+
+\subsection{(b)}
+$x = \{y, z\}$
+\begin{proof}
+$x = \{y, z\} \Coloneqq \forall w (w \in x \text{ IFF } (w = y \text{ OR } w = z))$
+\end{proof}
+
+\subsection{(c)}
+$x \subseteq y$ ($x$ is a subset of $y$ that might equal $y$.)
+\begin{proof}
+$x \subseteq y \Coloneqq \forall z (z \in x \text{ IMPLIES } z \in y)$
+\end{proof}
+
+Now we can explain how to express “$x$ is a proper subset of $y$” as a set theory formula using things we already know how to express. Namely, letting “$x \neq y$” abbreviate NOT$(x = y)$, the expression
+$$
+(x \subseteq y) \text{ AND } x \neq y
+$$
+describes a formula of set theory that means $x \subset y$.
+
+From here on, feel free to use any previously expressed property in describing formulas for the following:
+
+\subsection{(d)}
+$x = y \cup z$
+\begin{proof}
+$x = y \cup z \Coloneqq \forall w (w \in x \text{ IFF } (w \in y \text{ OR } w \in z))$
+\end{proof}
+
+\subsection{(e)}
+$x = y - z$
+\begin{proof}
+$x = y - z \Coloneqq \forall w (w \in x \text{ IFF } (w \in y \text{ AND } w \notin z))$
+\end{proof}
+
+\subsection{(f)}
+$x = pow(y)$
+\begin{proof}
+Remember ``pow'' stands for ``power set'', which is ``the set of all subsets''.
+
+$x = pow(y) \Coloneqq \forall w (w \in x \text{ IFF } w \subseteq y)$
+\end{proof}
+
+\subsection{(g)}
+$x = \bigcup_{z \in y} z$
+
+This means that $y$ is supposed to be a collection of sets, and $x$ is the union of all them. For example if $y = \{a, b, c, d\}$ then $x = a \cup b \cup c \cup d$. 
+
+A more concise notation for $\bigcup_{z \in y} z$ is simply $\bigcup y$.
+\begin{proof}
+$x = \bigcup_{z \in y} z \Coloneqq \forall w (w \in x \text{ IFF } \exists z (z \in y \text{ AND } w \in z))$
+\end{proof}
+
+\section{Problem 3}
+Forming a pair $(a, b)$ of items $a$ and $b$ is a mathematical operation that we can safely take for granted. But when we’re trying to show how all of mathematics can be reduced to set theory, we need a way to represent the pair $(a, b)$ as a set.
+
+(The property we want from ordered pairs $(a, b)$ is that, two ordered pairs are equal iff their ``first coordinates'' are equal to each other, and their ``second coordinates'' are equal to each other. That's how we intuitively understand ordered pairs in, say, analytic geometry or Calculus.)
+
+\subsection{(a)}
+Explain why representing $(a, b)$ by $\{a, b\}$ won’t work.
+\begin{proof}
+Since order does not matter for sets, we have $\{a, b\} = \{b, a\}$. This means that $(a, b) = (b, a)$. But obviously this is not what we want from an ordered pair. We want $(1, 2)$ to be different than $(2, 1)$. So this won't work.
+\end{proof}
+
+\subsection{(b)}
+Explain why representing $(a, b)$ by $\{a, \{b\}\}$ won’t work either. Hint: What pair does $\{\{1\}, \{2\}\}$ represent?
+\begin{proof}
+With this definition, $\{\{1\}, \{2\}\}$ represents (with $a = \{1\}$ and $b = 2$) the ordered pair $(\{1\}, 2)$.
+
+But again, order does not matter for sets, so $\{\{1\}, \{2\}\} = \{\{2\}, \{1\}\}$, so the same set ALSO represents (with $a = \{2\}, b = 1$) the ordered pair $(\{2\}, 1)$.
+
+So  we end up with $(\{1\}, 2) = (\{2\}, 1)$. Obviously this is not the behavior we want from an ordered pair. We want these to be different pairs.
+\end{proof}
+
+\subsection{(c)}
+Define 
+$$
+pair(a, b) \Coloneqq \{a, \{a, b\}\}
+$$
+Explain why representing $(a, b)$ as $pair(a, b)$ uniquely determines $a$ and $b$. Hint: Sets can’t be indirect members of themselves: $a \in a$ never holds for any set $a$, and neither can $a \in b \in a$ hold for any $b$.
+\begin{proof}
+For uniqueness, we want to prove:
+$$
+(a, b) = (c, d) \text{ IFF } a = c \text{ AND } b = d.
+$$
+Here $(a, b)$ is represented by $pair(a,b)$ so we want to prove:
+$$
+\{a, \{a, b\}\} = \{c, \{c, d\}\} \text{ IFF } a = c \text{ AND } b = d.
+$$
+The right-to-left implication is obvious: if $a = c \text{ AND } b = d$ then it immediately follows that $\{a, \{a, b\}\} = \{c, \{c, d\}\}$. So we want to prove the left-to-right implication.
+
+1. Assume $\{a, \{a, b\}\} = \{c, \{c, d\}\}$.
+
+2. By definition of set equality, these two sets have the same elements.
+
+3. There are 2 possibilities:
+
+4. Case 1: $a = c$ and $\{a, b\} = \{c, d\}$.
+
+4.1. Since $a = c$, we have $\{a, b\} = \{c, b\}$.
+
+4.2. By (4) and (4.1) we have $\{c, d\} = \{c, b\}$.
+
+4.3. By (4.2) and definition of set equality, we have $d = b$. So we proved what we wanted in this case.
+
+5. Case 2: $a = \{c, d\}$ and $c = \{a, b\}$.
+
+5.1. By (5) we get: $a = \{c, d\} = \{\{a, b\}, d\}$. So $a = \{\{a, b\}, d\}$. In particular $\{a, b\}$ is a member of $a$.
+
+5.2. So by (5.2) we get a chain of membership relations:
+$$
+a \in \{a, b\} \in a
+$$
+which the Hint told us is impossible (this impossibility is actually a consequence of the ZFC axiom called ``Axiom of Foundation'', a.k.a. ``Axiom of Regularity'').
+
+Contradiction! So Case 2 is impossible.
+
+6. By (4) and (5) we see that $a = c$ and $b = d$.
+\end{proof}
+
+\section{Problem 4}
+Subset take-away is a two player game played with a finite set, A, of numbers. Players alternately choose nonempty subsets of A with the conditions that a player may not choose:
+
+the whole set A, or
+
+any set containing a set that was named earlier.
+
+The first player who is unable to move loses the game.
+
+For example, if the size of A is one, then there are no legal moves and the second player wins. If A has exactly two elements, then the only legal moves are the two one-element subsets of A. Each is a good reply to the other, and so once again the second player wins.
+
+The first interesting case is when A has three elements. This time, if the first player picks a subset with one element, the second player picks the subset with the other two elements. If the first player picks a subset with two elements, the second player picks the subset whose sole member is the third element. In both cases,
+these moves lead to a situation that is the same as the start of a game on a set with two elements, and thus leads to a win for the second player.
+
+Verify that when A has four elements, the second player still has a winning strategy.
+
+\begin{proof}
+There are way too many cases to work out by hand if we tried to list all possible games. But the elements of A all behave the same, so we can cut to a small number of cases using the fact that permuting around the elements of A in any game yields another possible game. We can do this by not mentioning specific elements of A, but instead using the variables $a, b, c, d$ whose values
+will be the four elements of A.
+
+We consider two cases for the move of the Player 1 when the game starts:
+
+1. Player 1 chooses a one element or a three element subset. Then Player 2 should choose the complement of Player one’s choice. The game then becomes the same as playing the $n = 3$ game on the three element set chosen in this first round, where we know Player 2 has a winning strategy.
+
+2. Player 1 chooses a subset of 2 elements. Let $a, b$ be these elements, that is, the first move is $\{a, b\}$. Player 2 should choose the complement, $\{c, d\}$, of Player 1’s choice. We then have the following subcases:
+
+(a) Player 1’s second move is a one element subset, $\{a\}$. Player 2 should choose $\{b\}$. The game is then reduced to the two element game on $\{c, d\}$ where Player 2 has a winning strategy.
+
+(b) Player 1’s second move is a two element subset, $\{a, c\}$. Player 2 should choose its com­plement, $\{b, d\}$. This leads to two subsubcases:
+
+i. Player 1’s third move is one of the remaining sets of size two, $\{a, d\}$. Player 2 should choose its complement, $\{b, c\}$. The remaining possible moves are the four sets of size 1, where the Player 2 clearly wins after two more rounds.
+
+ii. Player 1’s third move is a one element set, $\{a\}$. Player 2 should choose $\{b\}$. The game is then reduced to the case two element game on $\{c, d\}$ where Player 2 has a winning strategy.
+
+So in all cases, Player 2 has a winning strategy in the game for $n = 4$.
+\end{proof}
+\end{document}
