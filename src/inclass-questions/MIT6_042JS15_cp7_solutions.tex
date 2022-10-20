@@ -1,0 +1,174 @@
+\documentclass[14pt]{extarticle} 
+\usepackage{amsmath,mathtools,amsfonts,amsthm,amssymb,hyperref}
+\usepackage{wasysym,geometry,bussproofs,latexsym,parskip,bookmark}
+\usepackage{mathtools,float}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\hypersetup{colorlinks,allcolors=blue,linktoc=all}
+\geometry{a4paper} 
+\geometry{margin=0.5in}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\author{https://github.com/spamegg1}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Problem 1}
+The inverse, $R^{-1}$ , of a binary relation, $R$, from $A$ to $B$, is the relation from $B$ to $A$ defined by:
+$$
+b R^{-1}a \text{ iff } a R b
+$$
+In other words, you get the diagram for $R^{-1}$ from $R$ by “reversing the arrows” in the diagram describing $R$. Now many of the relational properties of $R$ correspond to different properties of $R^{-1}$ . For example, $R$ is total iff $R^{-1}$ is a surjection.
+
+Fill in the remaining entries is this table:
+$$
+\begin{array}{c|cc}
+R \text{ is}  & \text{ iff } & R^{-1} \text{ is} \\ 
+\hline 
+\text{total} &   & \text{a surjection} \\
+\text{a function} &   &  \\
+\text{a surjection} &   &  \\
+\text{an injection} &   &  \\
+\text{a bijection} &   & 
+\end{array}
+$$
+Hint: Explain what’s going on in terms of “arrows” from $A$ to $B$ in the diagram for $R$.
+
+Arrow Properties
+
+Definition. A binary relation $R$:
+
+is a function when it has the $\leq 1$ arrow-out property.
+
+is surjective when it has the $\geq 1$ arrows-in property, that is, for every point in the right hand, codomain column has at least one arrow pointing to it.
+
+is total when it has the $\geq 1$ arrows-out property.
+
+is injective when it has the $\leq 1$ arrow-in property.
+
+is bijective when it has both the $=1$ arrow-out property and the $=1$ arrow-in property.
+
+\begin{proof}
+$$
+\begin{array}{c|cc}
+R \text{ is}  & \text{ iff } & R^{-1} \text{ is} \\ 
+\hline 
+\text{total} &   & \text{a surjection} \\
+\text{a function} &   & \text{an injection} \\
+\text{a surjection} &   & \text{total} \\
+\text{an injection} &   & \text{a function} \\
+\text{a bijection} &   & \text{a bijection}
+\end{array}
+$$
+\end{proof}
+
+\section{Problem 2}
+Let $A = \{a_0, a_1, \ldots, a_{n-1}\}$ be a set of size $n$, and $B = \{b_0, b_1, \ldots, b_{m - 1}\}$ be a set of size $m$. Prove that $|A \times B| = mn$ by defining a simple bijection from $A\times B$ to the nonnegative integers from 0 to $mn - 1$.
+\begin{proof}
+A bijection $f : A\times B \to \{0, 1, \ldots , mn - 1\}$ can be defined by the rule
+$$
+f(a_k, b_j) \Coloneqq jn + k
+$$
+\end{proof}
+
+\section{Problem 3}
+Assume $f:A\to B$ is a total function, and $A$ is finite. Replace the $*$ with one of $\leq, =, \geq$ to produce the strongest correct version of the following statements:
+\subsection{(a)}
+$|f(A)| * |B|$.
+\begin{proof}
+$|f(A)| \leq |B|$.
+\end{proof}
+
+\subsection{(b)}
+If $f$ is a surjection, then $|A| * |B|$.
+\begin{proof}
+$|A| \geq |B|$.
+\end{proof}
+
+\subsection{(c)}
+If $f$ is a surjection, then $|f(A)| * |B|$.
+\begin{proof}
+$|f(A)| = |B|$.
+\end{proof}
+
+\subsection{(d)}
+If $f$ is an injection, then $|f(A)| * |A|$.
+\begin{proof}
+$|f(A)| = |A|$.
+\end{proof}
+
+\subsection{(e)}
+If $f$ is a bijection, then $|A| * |B|$.
+\begin{proof}
+$|A| = |B|$.
+\end{proof}
+
+\section{Problem 4}
+Let $R : A \to B$ be a binary relation. Use an arrow counting argument to prove the following generalization of the Mapping Rule 1 in the course textbook.
+
+\begin{lemma}
+If $R$ is a function, and $X \subseteq A$, then
+$$
+|X| \geq |R(X)|
+$$
+\end{lemma}
+
+\begin{proof}
+1. Assume $R: A \to B$ is a function and $X \subseteq A$.
+
+2. Since $R$ is a function, it has the $\leq 1$ arrow-out property. 
+
+3. So by (2), we have $|X| \geq (\#$ arrows from $X$).
+
+4. By definition of $R(X)$, each element of $R(X)$ is the endpoint of an arrow going out from $X$. 
+
+5. So by (4) we have ($\#$ arrows from $X) \geq |R(X)|$.
+
+6. Combining (3) and (5) we get $|X| \geq |R(X)|$.
+\end{proof}
+
+\section{Problem 5}
+\subsection{(a)}
+Prove that if $A$ surj $B$ and $B$ surj $C$, then $A$ surj $C$.
+\begin{proof}
+By definition of surj, there are surjective functions, $F : A \to B$ and $G : B \to C$.
+
+Let $H \Coloneqq G \circ F$ be the function equal to the composition of $G$ and $F$, that is 
+$$
+H(a) \Coloneqq G(F(a))
+$$
+
+We show that $H$ is surjective, which will complete the proof. 
+
+So suppose $c \in C$. Then since $G$ is a surjection, $c = G(b)$ for some $b \in B$. Likewise, $b = F (a)$ for some $a \in A$. Hence $c = G(F (a)) = H(a)$, proving that $c$ is in the range of $H$, as required.
+\end{proof}
+
+\subsection{(b)}
+Explain why $A$ surj $B$ iff $B$ inj $A$.
+\begin{proof}
+(right to left): By definition of inj, there is a total injective relation, $R: B \to A$.
+
+But this implies that $R^{-1}$ is a surjective function from $A$ to $B$.
+
+(left to right): By definition of surj, there is a surjective function, $F: A \to B$. But this implies that $F^{-1}$ is a total injective relation from $A$ to $B$.
+\end{proof}
+
+\subsection{(c)}
+Conclude from (a) and (b) that if $A$ inj $B$ and $B$ inj $C$, then $A$ inj $C$.
+\begin{proof}
+From (b) and (a) we have that if $C$ inj $B$ and $B$ inj $A$, then $C$ inj $A$, so just switch the names $A$ and $C$.
+\end{proof}
+
+\subsection{(d)}
+Explain why $A$ inj $B$ iff there is a total injective function ($=1$ out, $\leq 1$ in) from $A$ to $B$.
+\begin{proof}
+(left to right) Assume $A$ inj $B$. By definition of inj, there is a total injective relation $R: A \to B$.
+
+So $R$ has the $\geq 1$ arrows-out property and the $\leq 1$ arrow-in property. We can modify $R$ into a total injective function $F$ ($=1$ out, $\leq 1$ in) as follows. 
+
+For every $a \in A$ such that $R$ has more than 1 arrows going out from $a$, remove all but 1 of those arrows. This way the $\geq 1$ arrows-out property turns into the $=1$ arrow-out property, and we still have the $\leq 1$ arrow-in property.
+
+(right to left) Assume there is a total injective function ($=1$ out, $\leq 1$ in) $F$ from $A$ to $B$. Since every function is also a relation, $F$ is a total injective relation from $A$ to $B$. This is the definition of inj, therefore $A$ inj $B$.
+\end{proof}
+\end{document}
