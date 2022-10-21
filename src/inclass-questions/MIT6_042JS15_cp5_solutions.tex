@@ -129,9 +129,31 @@ There is a student who has e-mailed at most two other people in the class, besid
 
 The domain of discourse should be the set of students in the class; in addition, the only predicates that you may use are: equality, and $E(x, y)$ meaning that “$x$ has sent e-mail to $y$.”
 \begin{proof}
-Using $\wedge$ for AND, $\vee$ for OR, $\rightarrow$ for IMPLIES:
+``Besides possibly himself'' means that the student might or might not have emailed himself.
 
-$\exists s \exists x \exists y (x \neq s \wedge y \neq s \wedge \forall z(E(s, z) \rightarrow (z = s \vee z = x \vee z = y)))$
+``At most two other'' means that the student might have emailed 0, 1 or 2 other people.
+
+So there are 6 possibilities. Using $\wedge$ for AND, $\vee$ for OR, $\neg$ for NOT, $\leftrightarrow$ for IFF:
+
+Student emailed nobody: $\exists s \forall z (\neg E(s,z))$,
+
+Student emailed himself only: $\exists s \forall z (E(s,z) \leftrightarrow z = s)$,
+
+Student emailed one other person only: $\exists s \exists x (\neg(x = s) \wedge \forall z (E(s,z) \leftrightarrow z = x))$
+
+Student emailed himself and one other person only: 
+
+$\exists s \exists x (\neg(x = s) \wedge \forall z (E(s,z) \leftrightarrow z = x \vee z = s))$
+
+Student emailed two other persons only:
+
+$\exists s \exists x \exists y (\neg(x = s) \wedge \neg(y = s) \wedge \neg(x = y) \wedge \forall z (E(s,z) \leftrightarrow z = x \vee z = y))$
+
+Student emailed himself and two other persons only:
+
+$\exists s \exists x \exists y (\neg(x = s) \wedge \neg(y = s) \wedge \neg(x = y) \wedge \forall z (E(s,z) \leftrightarrow z = x \vee z = y \vee z = s))$
+
+So we can join these formulas with OR's between them to get the desired formula.
 \end{proof}
 
 \section{Problem 4}
