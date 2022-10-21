@@ -1,0 +1,459 @@
+\documentclass[14pt]{extarticle} 
+\usepackage{amsmath,mathtools,amsfonts,amsthm,amssymb,hyperref}
+\usepackage{wasysym,geometry,bussproofs,latexsym,parskip,bookmark}
+\usepackage{mathtools,float}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\hypersetup{colorlinks,allcolors=blue,linktoc=all}
+\geometry{a4paper} 
+\geometry{margin=0.5in}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 4, Fri. (Session 9)''}
+\author{https://github.com/spamegg1}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Problem 1}
+Multiplying and dividing an integer $n$ by $2$ only requires a one digit left or right shift of the binary representation of $n$, which are hardware-supported fast operations on most computers. Here is a state machine, $R$, that computes the product of two nonnegative integers $x$ and $y$ using just these shift operations, along with integer addition:
+
+\begin{align*}
+\text{states} \Coloneqq & \,\,\, \mathbb{N}^3 & \text{(triples of nonnegative integers)}\\
+\text{start state} \Coloneqq & \,\,\, (x, y, 0) & \\
+\text{transitions} \Coloneqq & \,\,\,(r, s, a) \longrightarrow & \left\{
+     \begin{array}{lr}
+       (2r, s/2, a) & \text{for even } s > 0\\
+			(2r, (s-1)/2, a + r) & \text{for odd } s > 0
+     \end{array}
+   \right.
+\end{align*}
+
+\subsection{(a)}
+Verify that
+$$
+P((r, s, a)) \Coloneqq \,\,\, [rs + a = xy]
+$$
+is a preserved invariant of $R$.
+\begin{proof}
+The proof is by Structural Induction on the definition of the states and the transitions.
+
+{\bf Base Case.} We first verify that $P$ holds for the start state.
+$$
+P(\text{start state}) = P((x, y, 0)) \Coloneqq [xy + 0 = xy]
+$$
+Since $xy + 0 = xy$ is true, $P$ holds for the start state.
+
+{\bf Inductive Step.} Now we show that, if $P$ holds for a given state, then it also holds for transition states of that state.
+
+Assume $P((r, s, a))$ holds. That is: $rs + a = xy$.
+
+Case 1: $s$ is even. 
+
+Then the next state is $(2r, s/2, a)$. So  $P((2r, s/2, a))$ is the statement: $(2r)(s/2) + a = xy$. This is equivalent to: $rs + a = xy$ which is true by the Induction hypothesis. So $P((2r, s/2, a))$ is true.
+
+Case 2: $s$ is odd. 
+
+Then the next state is $(2r, (s-1)/2, a + r)$. So  $P((2r, (s-1)/2, a+r))$ is the statement: $(2r)((s-1)/2) + a + r = xy$. This is equivalent to: $r(s-1) + a + r = xy$ which is equivalent to $rs-r + a + r = xy$, which is $rs + a = xy$, which is true by the Induction hypothesis. So $P((2r, (s-1)/2, a + r))$ is true.
+
+So by Structural Induction, $P$ holds for all states. Therefore $P$ is a preserved invariant.
+\end{proof}
+
+\subsection{(b)}
+Prove that $R$ is partially correct: if $R$ reaches a final state (a state from which no transition is possible) then $a = xy$.
+\begin{proof}
+Assume $(r, s, a)$ is a state from which no transition is possible. Then it must be that $s = 0$.
+
+By part (a), $P$ is a preserved invariant, so $P((r, s, a))$ is true. That is: $rs + a = xy$. But $s = 0$, so $r \cdot 0 + a = xy$, so $a = xy$.
+\end{proof}
+
+\subsection{(c)}
+Briefly explain why this state machine will terminate after a number of transitions bounded by a small constant times the length of the binary representation of $y$.
+\begin{proof}
+With each transition, the second coordinate $s$ of a given state $(r, s, a)$ gets at least halved. Since the starting value of the second coordinate is $y$, which is a finite number; after a finite number of transitions the second coordinate will become 0, after which no transitions are possible.
+
+Since $y$ is finite, there is a nonnegative integer $n$ such that $2^n \leq y < 2^{n+1}$. So, after at most $n + 1$ state transitions, the machine will reach a final state. The length of the binary representation of $y$ is $n+1$.
+\end{proof}
+
+\section{Problem 2}
+In this problem you will establish a basic property of a puzzle toy called the Fifteen Puzzle using the method of invariants. The Fifteen Puzzle consists of sliding square tiles numbered $1, \ldots, 15$ held in a $4 \times 4$ frame with one empty square. Any tile adjacent to the empty square can slide into it.
+
+The standard initial position is
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 \\
+\hline 
+5 & 6 & 7 & 8 \\
+\hline 
+9 & 10 & 11 & 12 \\
+\hline 
+13 & 14 & 15 &  \\
+\hline 
+\end{array}
+$$
+
+We would like to reach the target position (known in the oldest author’s youth as “the impossible”):
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+15 & 14 & 13 & 12 \\
+\hline 
+11 & 10 & 9 & 8 \\
+\hline 
+7 & 6 & 5 & 4 \\
+\hline 
+3 & 2 & 1 &  \\
+\hline 
+\end{array}
+$$
+
+A state machine model of the puzzle has states consisting of a $4 \times 4$ matrix with 16 entries consisting of the integers $1, \ldots, 15$ as well as one “empty” entry like each of the two arrays above.
+
+The state transitions correspond to exchanging the empty square and an adjacent numbered tile. For example, an empty at position $(2,2)$ can exchange position with tile above it, namely, at position $(1,2)$:
+
+\begin{center}
+\begin{tabular}{ccc}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$n_1$ & $n_2$ & $n_3$ & $n_4$ \\
+\hline 
+$n_5$ &       & $n_6$ & $n_7$ \\
+\hline 
+$n_8$ & $n_9$ & $n_{10}$ & $n_{11}$ \\
+\hline 
+$n_{12}$ & $n_{13}$ & $n_{14}$ & $n_{15}$ \\
+\hline 
+\end{tabular}
+
+ & $\longrightarrow$ &
+\begin{tabular}{|c|c|c|c|}
+\hline
+$n_1$ &       & $n_3$ & $n_4$ \\
+\hline 
+$n_5$ & $n_2$ & $n_6$ & $n_7$ \\
+\hline 
+$n_8$ & $n_9$ & $n_{10}$ & $n_{11}$ \\
+\hline 
+$n_{12}$ & $n_{13}$ & $n_{14}$ & $n_{15}$ \\
+\hline 
+\end{tabular}
+\end{tabular}
+\end{center}
+
+We will use the invariant method to prove that there is no way to reach the target state starting from the initial state.
+
+We begin by noting that a state can also be represented as a pair consisting of two things:
+
+1. a list of the numbers $1, \ldots, 15$ in the order in which they appear—reading rows left-to-right from the top row down, ignoring the empty square, and
+
+2. the coordinates of the empty square, where the upper left square has coordinates $(1,1)$, the lower right $(4,4)$.
+
+\subsection{(a)}
+(a) Write out the “list” representation of the start state and the “impossible” state.
+\begin{proof}
+start: $((1, 2, \ldots, 15), (4, 4))$,
+impossible: $((15, 14, \ldots, 1), (4, 4))$.
+\end{proof}
+
+Let $L$ be a list of the numbers $1, \ldots, 15$ in some order. A pair of integers is an out-of-order pair in $L$ when the first element of the pair both comes earlier in the list and is larger, than the second element of the pair. For example, the list $1, 2, 4, 5, 3$ has two out-of-order pairs: $(4,3)$ and $(5,3)$. The increasing list $1, 2, \ldots, n$ has no out-of-order pairs.
+
+Let a state, $S$, be a pair $(L, (i, j))$ described above. We define the parity of $S$ to be 0 or 1 depending on whether the sum of the number $p(L)$ of out-of-order pairs in $L$ and the row-number of the empty square is even or odd. That is,
+$$
+parity(S) \Coloneqq \left\{
+		\begin{array}{lr}
+			0 & \text{if } p(L) + i \text{ is even}\\
+			1 & \text{otherwise. }
+     \end{array}
+   \right.
+$$
+
+\subsection{(b)}
+(b) Verify that the parity of the start state and the target state are different.
+\begin{proof}
+The parity of the start state is
+$$
+(0 + 4) \mod 2 = 0.
+$$
+The parity of the target is
+$$
+((15 \cdot 14/2) + 4) \mod 2 = 1.
+$$
+\end{proof}
+
+\subsection{(c)}
+(c) Show that the parity of a state is preserved under transitions. Conclude that “the impossible” is impossible to reach.
+
+\begin{proof}
+To show that the parity is constant, consider how moves may affect the parity. There are only 4 types of moves: a move to the left, a move to the right, a move to the row above, or a move to the row below.
+
+Note that horizontal moves change nothing, and vertical moves both change $i$ by 1, and move a tile three places forward or back in the list, $L$. To consider how the parity is changed in this case, we need to consider only the 3 pairs in $L$ that are between the tile’s old and new position. (The other pairs are not effected by the tile’s move). This reverses the order of three pairs in $L$, changing the number of inversions by 3 or 1, but always by an odd amount.
+
+To confirm this last remark, note that if the 3 pairs were all out of order or all in order before, the amount is changed by 3. If two pairs were out of order and 1 pair was in order or if one pair was
+out of order and two were in order, this will change the amount by 1. So the sum of $i$ and the number of out-of-order pairs changes by an even amount (either 1+3 or 1+1), which implies that its parity remains the same. Since the initial state has parity 0 (even), all states reachable from the initial state must have parity 0, so the target state with parity 1 can’t be reachable.
+\end{proof}
+
+By the way, if two states have the same parity, then in fact there is a way to get from one to the other. If you like puzzles, you’ll enjoy working this out on your own.
+
+\section{Problem 3}
+The Massachusetts Turnpike Authority is concerned about the integrity of the new Zakim bridge. Their consulting architect has warned that the bridge may collapse if more than 1000 cars are on it at the same time. The Authority has also been warned by their traffic consultants that the rate of accidents from cars speeding across bridges has been increasing.
+
+Both to lighten traffic and to discourage speeding, the Authority has decided to make the bridge one-way and to put tolls at both ends of the bridge (don’t laugh, this is Massachusetts). So cars will pay tolls both on entering and exiting the bridge, but the tolls will be different. In particular, a car will pay \$3 to enter onto the bridge and will pay \$2 to exit. To be sure that there are never too many cars on the bridge, the Authority will let a car onto the bridge only if the difference between the amount of money currently at the entry toll booth and the amount at the exit toll booth is strictly less than a certain threshold amount of \$$T_0$.
+
+The consultants have decided to model this scenario with a state machine whose states are triples of nonnegative integers, $(A, B, C)$ where 
+
+$A$ is an amount of money at the entry booth,
+
+$B$ is an amount of money at the exit booth, and
+
+$C$ is a number of cars on the bridge.
+
+Any state with $C > 1000$ is called a collapsed state, which the Authority dearly hopes to avoid. There will be no transition out of a collapsed state.
+
+Since the toll booth collectors may need to start off with some amount of money in order to make change, and there may also be some number of “official” cars already on the bridge when it is opened to the public, the consultants must be ready to analyze the system started at any uncollapsed state. So let $A_0$ be the initial
+number of dollars at the entrance toll booth, $B_0$ the initial number of dollars at the exit toll booth, and $C_0 \leq 1000$ the number of official cars on the bridge when it is opened. You should assume that even official cars pay tolls on exiting or entering the bridge after the bridge is opened.
+
+\subsection{(a)}
+Give a mathematical model of the Authority’s system for letting cars on and off the bridge by specifying a transition relation between states of the form $(A, B, C)$ above.
+\begin{proof}
+State $(A, B, C)$ goes to state
+
+(i) $(A + 3, B, C + 1)$, provided that $A - B < T_0$ and $C \leq 1000$. This transition models the case where a car enters the bridge.
+
+(ii) $(A, B + 2, C - 1)$, provided that $0 < C \leq 1000$. This transition models the case where a car leaves the bridge.
+
+Note that the condition for the first transition has $C \leq 1000$ instead of $C < 1000$. A car can enter so long as it is not in the collapsed state ($C > 1000$). In other words, a car may still enter when $C = 1000$; and the next state will be a collapsed state with $C = 1001 > 1000$.
+\end{proof}
+
+\subsection{(b)}
+Characterize each of the following derived variables
+$$
+A, B, A + B, A - B, 3C -A, 2A - 3B, B + 3C, 2A - 3B - 6C, 2A - 2B - 3C
+$$
+as one of the following:
+
+\begin{center}
+\begin{tabular}{|ll|}
+\hline
+constant & C \\
+strictly increasing & SI \\
+strictly decreasing & SD \\
+weakly increasing but not constant & WI \\
+weakly decreasing but not constant & WD \\
+none of the above & N \\
+\hline
+\end{tabular}
+\end{center}
+
+and briefly explain your reasoning.
+
+\begin{proof}
+In every transition, at least one of $A$ and $B$ increases. So their sum $A+B$ is strictly increasing. $2A - 3B$ can fluctuate, going up on (i) and down on (ii).
+
+The difference $3C - A$ doesn’t change under transitions of type (i), but decreases under transitions of type (ii); so is weakly decreasing.
+
+However, $B+3C$ increases under transitions of type (i), but decreases under transitions of type (ii).
+
+On the other hand, $6C$ and $2A - 3B$ simultaneously increase by 6 under transition (i) or simulta­neously decrease by 6 under transition (ii), which makes their difference constant.
+
+Finally, under (i), $2A$ increases by 6, $B$ is unchanged, and $3C$ increases by 3, so $2A - 2B - 3C$ increases by $6 - 3 = 3$. 
+
+However, under (ii), $A$ is unchanged, $3C$ decreases by 3 and $2B$ increases by 4, so $2A - 2B - 3C$ decreases by $-(-4) - 3 = 1$.
+
+The completed table follows.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$A$ & WI \\
+\hline
+$B$ & WI \\
+\hline
+$A + B$ & SI \\
+\hline
+$A - B$ & N \\
+\hline
+$3C - A$ & WD \\
+\hline
+$2A - 3B$ & N \\
+\hline
+$B + 3C$ & N \\
+\hline
+$2A - 3B - 6C$ & C \\
+\hline
+$2A - 2B - 3C$ & N \\
+\hline
+\end{tabular}
+\end{center}
+\end{proof}
+
+The Authority has asked their engineering consultants to determine $T$ and to verify that this policy will keep the number of cars from exceeding 1000.
+
+The consultants reason that if $C_0$ is the number of official cars on the bridge when it is opened, then an additional $1000 - C_0$ cars can be allowed on the bridge. So as long as $A - B$ has not increased by $3(1000 - C_0)$, there shouldn’t more than 1000 cars on the bridge. So they recommend defining 
+
+$$
+T_0 \Coloneqq 3(1000 - C_0) + (A_0 - B_0)
+$$
+
+where $A_0$ is the initial number of dollars at the entrance toll booth, $B_0$ is the initial number of dollars at the exit toll booth.
+
+\subsection{(c)}
+Use the results of part (b) to define a simple predicate, $P$, on states of the transition system which is satisfied by the start state, that is $P(A_0, B_0, C_0)$ holds, is not satisfied by any collapsed state, and is a preserved invariant of the system. Explain why your $P$ has these properties. Conclude that the traffic won’t cause the bridge to collapse.
+\begin{proof}
+Let $D_0 \Coloneqq 2A_0 - 3B_0 - 6C_0$.
+
+{\bf Preserved Invariant:}
+$$
+P(A, B, C) \Coloneqq [2A - 3B - 6C = D_0 ] \text{ AND } [C \leq 1000]
+$$
+
+Note that $P(A_0, B_0, C_0)$ is true because we know that $C_0 \leq 1000$, and it is not true in any collapsed state. To verify that $P$ is preserved, suppose state $(A, B, C)$ has a transition to $(A', B', C')$, and $P(A, B, C)$ is true. We verify that $P(A', B', C')$ is true by considering the two kinds of transitions. 
+
+Transition (i) (a car enters the bridge): so
+$$
+6C' = 6(C + 1) = 6C + 6 = (2A - 3B - D_0) + 6 = 2(A + 3) - 3B - D_0 = 2A' - 3B' - D_0
+$$
+
+which implies that
+$$
+2A'- 3B'- 6C'= D_0 ,
+$$
+as required.
+
+Also, the transition is possible only if $A - B < T_0$. But this implies
+$$
+\begin{array}{cclr}
+6C' & = & 2A' - 3B' - D_0 & \text{(by (2))} \\
+    & = & 2(A' - B') - B' - D_0 & \text{} \\
+    & = & 2((A + 3) - B) - B - D_0 & \text{(since $A' = A + 3, B' = B$)} \\
+    & = & 2(A - B) - B - D_0 + 6 & \text{} \\
+    & \leq & 2(A - B) - B_0 - D_0 + 6 & \text{(since $B$ is WI)} \\
+    & \leq & 2(T_0 - 1) - B_0 - D_0 + 6 & \text{(since $A - B \leq T_0 - 1$)} \\
+    & = & 2[3(1000 - C_0) + (A_0 - B_0)] - B_0 - D_0 + 4 & \text{(by (1))} \\
+    & = & 6000 - 6C_0 + 2A_0 - 3B_0 - D_0 + 4 & \text{} \\
+    & = & 6004 & \\ 
+\end{array}
+$$
+and so $C' \leq \lfloor 6004/6 \rfloor = 1000$, as required.
+
+Transition (ii) (a car leaves the bridge): so
+$$
+6C' = 6(C - 1) = 6C - 6 = 2A - 3B - 6 = 2A - 3(B + 2) = 2A' - 3B' 
+$$
+In addition, $C' < C \leq 1000$ so $C' \leq 1000$.
+\end{proof}
+
+\subsection{(d)}
+A clever MIT intern working for the Turnpike Authority agrees that the Turnpike’s bridge management policy will be safe: the bridge will not collapse. But she warns her boss that the policy will lead to deadlock: a situation where traffic can’t move on the bridge even though the bridge has not collapsed. 
+
+Explain more precisely in terms of system transitions what the intern means, and briefly, but clearly, justify her claim.
+\begin{proof}
+The intern means that any long enough sequence of transitions will arrive at a state in which no transition is possible, even though there are no cars on the bridge. This happens because every time a car enters and then exits the bridge the value of $A - B$ increases by 1. So after 3000 cars have crossed the bridge, no further car can enter the bridge because 
+$$
+A - B \geq 3000 + A_0 - B_0 \geq 3(1000 - C_0) + (A_0 - B_0) = T_0
+$$
+
+After that, cars can only exit the bridge. So after at most 3000 + 1000 transitions, the system dead­locks with the bridge empty but no cars allowed onto the bridge.
+\end{proof}
+
+\section{Problem 4 (Supplemental Problem)}
+A classroom is designed so students sit in a square arrangement. An outbreak of beaver flu sometimes infects students in the class; beaver flu is a rare variant of bird flu that lasts forever, with symptoms including a yearning for more quizzes and the thrill of late night problem set sessions.
+
+Here is an illustration of a $6 \times 6$ seat classroom with seats represented by squares. The locations of infected students are marked with an asterisk.
+
+$$
+\begin{array}{|c|c|c|c|c|c|}
+\hline
+ * & \,\,\, & \,\,\,  & \,\,\,  & * & \,\,\, \\
+\hline
+ \,\,\, & * & \,\,\,  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & \,\,\,  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & \,\,\,  & *  & \,\,\, & * \\
+\hline
+\end{array}
+$$
+
+Outbreaks of infection spread rapidly step by step. A student is infected after a step if either:
+
+the student was infected at the previous step (since beaver flu lasts forever), or
+
+the student was adjacent to at least two already-infected students at the previous step.
+
+Here adjacent means the students’ individual squares share an edge (front, back, left or right); they are not adjacent if they only share a corner point. So each student is adjacent to 2, 3 or 4 others. In the example, the infection spreads as shown below.
+
+\begin{center}
+\begin{tabular}{ccccc}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ * & \,\,\, & \,\,\,  & \,\,\,  & * & \,\,\, \\
+\hline
+ \,\,\, & * & \,\,\,  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & \,\,\,  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & \,\,\,  & *  & \,\,\, & * \\
+\hline
+\end{tabular}
+ & $\longrightarrow$ &
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ * & * & \,\,\,  & \,\,\,  & * & \,\,\, \\
+\hline
+ * & * & *  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & * & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & \,\,\,  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & *  & * & * \\
+\hline
+\end{tabular} 
+ & $\longrightarrow$ &
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ * & * & *  & \,\,\,  & * & \,\,\, \\
+\hline
+ * & * & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ * & * & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & * & *  & *  & \,\,\, & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & *  & * & \,\,\, \\
+\hline
+ \,\,\, & \,\,\, & *  & *  & * & * \\
+\hline
+\end{tabular}
+\end{tabular}
+\end{center}
+
+In this example, over the next few time-steps, all the students in class become infected.
+
+{\bf Theorem.} If fewer than $n$ students among those in an $n \times n$ arrangement are initially infected in a flu outbreak, then there will be at least one student who never gets infected in this outbreak, even if students attend all the lectures.
+
+Prove this theorem.
+
+Hint: Think of the state of an outbreak as an $n \times n$ square above, with asterisks indicating infection. The rules for the spread of infection then define the transitions of a state machine. Find a weakly decreasing derived variable that leads to a proof of this theorem. (If you don’t see it within 4 minutes, ask your TA for a four word hint.)
+
+\begin{proof}
+Define the perimeter of an infected set of students to be the number of edges with infection on exactly one side. Let $\nu$ be size (number of edges) in the perimeter.
+
+We claim that $\nu$ is a weakly decreasing variable. This follows because the perimeter changes after a transition only because some squares became newly infected. By the rules above, each newly-infected square is adjacent to at least two previously-infected squares. Thus, for each newly-infected square, at least two edges are removed from the perimeter of the infected region, and at most two edges are added to the perimeter. Therefore, the perimeter of the infected region cannot increase.
+
+Now if an $n\times n$ grid is completely infected, then the perimeter of the infected region is $4n$. Thus, the whole grid can become infected only if the perimeter is initially at least $4n$. Since each square has perimeter 4, at least $n$ squares must be infected initially for the whole grid to become infected.
+\end{proof}
+\end{document}

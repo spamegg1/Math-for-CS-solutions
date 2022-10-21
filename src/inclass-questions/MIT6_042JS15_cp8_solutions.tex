@@ -1,0 +1,115 @@
+\documentclass[14pt]{extarticle} 
+\usepackage{amsmath,mathtools,amsfonts,amsthm,amssymb,hyperref}
+\usepackage{wasysym,geometry,bussproofs,latexsym,parskip,bookmark}
+\usepackage{mathtools}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\hypersetup{colorlinks,allcolors=blue,linktoc=all}
+\geometry{a4paper} 
+\geometry{margin=0.5in}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 4, Mon. (Session 8)''}
+\author{https://github.com/spamegg1}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Problem 1}
+Prove by induction:
+$$
+1 + \frac{1}{4} + \frac{1}{9} + \cdots + \frac{1}{n^2} < 2 - \frac{1}{n} \,\,\,\,(1)
+$$
+for all $n > 1$.
+\begin{proof}
+(By Induction). The induction hypothesis is $P(n)$ is the above inequality (1).
+
+{\bf Base Case:} ($n = 2$). The LHS of (1) in this case is $1 + 1/4$ and the RHS is $2 - 1/2$. Since LHS $= 5/4 < 6/4 = 3/2 =$ RHS, inequality (1) holds, and $P(2)$ is proved.
+
+{\bf Inductive Step:} Let $n$ be any natural number greater than 1, and assume $P(n)$ in order to prove $P(n + 1)$. That is, we assume (1). Adding $1/(n + 1)^2$ to both sides of this inequality yields
+
+\begin{align*}
+1 + \frac{1}{4} + \frac{1}{9} + \cdots + \frac{1}{n^2} + \frac{1}{(n+1)^2} & < 2 - \frac{1}{n} + \frac{1}{(n+1)^2}\\
+& = 2 - \left(\frac{1}{n} - \frac{1}{(n+1)^2}\right)\\
+& = 2 - \left(\frac{(n+1)^2}{n(n+1)^2} - \frac{n}{n(n+1)^2}\right)\\
+& = 2 - \left(\frac{n^2+2n+1}{n(n+1)^2} - \frac{n}{n(n+1)^2}\right)\\
+& = 2 - \left(\frac{n^2+n+1}{n(n+1)^2}\right)\\
+& = 2 - \left(\frac{n^2+n}{n(n+1)^2} + \frac{1}{n(n+1)^2}\right)\\
+& = 2 - \frac{n(n+1)}{n(n+1)^2} - \frac{1}{n(n+1)^2}\\
+& = 2 - \frac{1}{(n+1)} - \frac{1}{n(n+1)^2}\\
+& < 2 - \frac{1}{(n+1)} \\
+\end{align*}
+So we have proved $P(n+1)$.
+\end{proof}
+
+\section{Problem 2}
+\subsection{(a)}
+Prove by induction that a $2^n \times 2^n$ courtyard with a $1 \times 1$ statue of Bill in a corner can be covered with L-shaped tiles. (Do not assume or reprove the (stronger) result of Theorem 5.1.2 in the course textbook that Bill can be placed anywhere. The point of this problem is to show a different induction hypothesis that works.)
+\begin{proof}
+Let $P(n)$ be the proposition Bill can be placed in a corner of a $2^n \times 2^n$ courtyard with a proper tiling of the remainder with L-shaped tiles.
+
+{\bf Base case:} $P(0)$ is true because Bill fills the whole courtyard.
+
+{\bf Inductive step:} Assume that $P(n)$ is true for some $n\geq 0$; that is, there exists a tiling of the $2n\times 2n$ courtyard leaving Bill in a corner.
+
+To prove $P(n + 1)$, divide the $2n+1 \times 2n+1$ courtyard into four quadrants, each $2n\times 2n$. One quadrant will contain the corner designated for Bill. 
+
+By the induction hypothesis, we can get Bill into some corner of the quadrant, which means we can actually get him into any desired corner of the quadrant by rotating the tiling of the quadrant. So place Bill in the designated corner of the quandrant, and tile the rest of the quadrant.
+
+Now tile the remaining three quadrants, leaving a tile space open in the quadrant corners that are in the middle of the whole $2n+1 \times 2n+1$ courtyard (as in the diagram in the proof of Theorem 5.1.2).
+
+These three spaces form an L-shape that that can be filled with a single L-shaped tile, completing the full courtyard tiling. This proves $P(n + 1)$, completing the proof by induction that a square
+courtyard with side length any power of 2 can be tiled with Bill in a corner.
+\end{proof}
+
+\subsection{(b)}
+Use the result of part (a) to prove the original claim that there is a tiling with Bill in the middle.
+\begin{proof}
+To put Bill in the middle, tile each of the four quadrants, leaving the empty corner of the quadrant in the middle of the full courtyard. This leaves the four central squares of the full courtyard empty, so fill three of these squares with an L-shaped tile. This leaves a single central square untiled for Bill.
+\end{proof}
+
+\section{Problem 3}
+Any amount of 12 or more cents postage can be made using only 3¢ and 7¢ stamps. Prove this by induction using the induction hypothesis
+\begin{center}
+$S(n) \Coloneqq n + 12$ cents postage can be made using only 3¢ and 7¢ stamps.
+\end{center}
+\begin{proof}
+(by Strong Induction)
+
+{\bf Base Cases.} $S(0)$: 0 + 12 = 12 cents postage can be made using four 3¢ stamps.
+
+$S(1)$: 1 + 12 = 13 cents postage can be made using two 3¢ stamps and one 7¢ stamp (6 + 7 = 13).
+
+$S(2)$: 2 + 12 = 14 cents postage can be made using two 7¢ stamps (7 + 7 = 14).
+
+{\bf Inductive Step:} 
+
+1. Assume $n \geq 2$ and assume $S(k)$ is true for all $k \leq n$. Want to prove $S(n+1)$. In other words, want to show that $n + 13$ cents postage can be made using only 3¢ stamps and 7¢ stamps.
+
+2. Since $n - 2 \geq 0$, by (1) we know $S(n - 2)$ is true. So $n - 2 + 12 = n+10$ cents postage can be made using only 3¢ stamps and 7¢ stamps. We can add one more 3¢ stamp to this to make $n+13$ cents postage, which proves $S(n+1)$.
+\end{proof}
+
+
+\section{Problem 4}
+The following Lemma is true, but the proof given for it below is defective. Pinpoint exactly where the proof first makes an unjustified step and explain why it is unjustified.
+
+\begin{lemma}
+For any prime $p$ and positive integers $n, x_1, x_2, \ldots, x_n$, if $p \mid x_1x_2\ldots x_n$ then $p \mid x_i$ for some $1 \leq i \leq n$.
+\end{lemma}
+
+{\it Bogus proof.} Proof by strong induction on $n$. The induction hypothesis, $P(n)$, is that Lemma holds for $n$.
+
+{\bf Base case} $n = 1$: When $n = 1$, we have $p \mid x_1$, therefore we can let $i = 1$ and conclude $p \mid x_i$.
+
+{\bf Induction step:} Now assuming the claim holds for all $k \leq n$, we must prove it for $n + 1$.
+
+So suppose $p \mid x_1 x_2 \ldots x_{n + 1}$. Let $y_n = x_n x_{n+1}$, so $x_1 x_2 \ldots x_{n+1} = x_1 x_2 \ldots x_{n-1} y_n$. Since the
+righthand side of this equality is a product of $n$ terms, we have by induction that $p$ divides one of them. If $p \mid x_i$ for some $i < n$, then we have the desired $i$. Otherwise $p \mid y_n$. But since $y_n$ is a product of the two terms $x_n, x_{n+1}$, we have by strong induction that $p$ divides one of them. So in this case $p \mid x_i$ for $i = n$ or $i = n + 1$.
+\begin{proof}
+The issue is in this step:
+
+``But since $y_n$ is a product of the {\bf two terms} $x_n, x_{n+1}$, we have by strong induction that $p$ divides one of them.''
+
+This is using $P(2)$ as an assumption. For $P(2)$ to be assumed as part of our Strong Induction Hypothesis, we need to know that $n \geq 2$. But we have only proved $P(1)$; we haven't proved $P(2)$. In the Induction Step our assumption is $n \geq 1$. So we would have to prove $P(2)$ first.
+\end{proof}
+\end{document}
