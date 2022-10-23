@@ -71,7 +71,22 @@ Prove that if there is a surjective function ($\leq 1$ out, $\geq 1$ in mapping)
 Hint: A Computer Science proof involves filtering for duplicates.
 
 \begin{proof}
-asdasdasdasd
+Since $f$ is surjective, for every $s \in S$, the set 
+$$
+preimage_s \Coloneqq \{n \in \mathbb{N} \,\,|\,\, f(n) = s\}
+$$ 
+is a nonempty subset of $\mathbb{N}$.
+
+By the Well-Ordering Principle, for every $s \in S$, $preimage_s$ has a smallest element $smallest_s$.
+
+Define the set $preimage(S) \subseteq \mathbb{N}$ by
+$$
+preimage(S) \Coloneqq \{smallest_s \,\, | \,\, s \in S\}
+$$
+
+Therefore the function $g: S \to preimage(S)$ defined by $g(s) \Coloneqq smallest_s$ is a bijection.
+
+Since $preimage(S) \subseteq \mathbb{N}$, it is a countable set. Therefore $preimage(S)$ is either finite (in which case $S$ is also finite, therefore countable), or there is a bijection $h : preimage(S) \to \mathbb{N}$ (in which case $h \circ g : S \to \mathbb{N}$ is a bijection, therefore $S$ is countable).
 \end{proof}
 
 \section{Problem 3}
