@@ -9,54 +9,197 @@
 \hypersetup{colorlinks,allcolors=blue,linktoc=all}
 \geometry{a4paper} 
 \geometry{margin=0.5in}
-\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 6, Fri. (Session 15)''}
 \author{https://github.com/spamegg1}
 \begin{document}
 \maketitle
 \tableofcontents
 
+\section{The RSA Cryptosystem}
+A {\bf Receiver} who wants to be able to receive secret numerical messages creates a {\it private} key, which they keep secret, and a {\it public} key, which they make publicly available. Anyone with the public key can then be a {\bf Sender} who can publicly send secret messages to the {\bf Receiver} even if they have never communicated or shared any information besides the public key.
+
+Here is how they do it:
+
+\subsection{Beforehand} 
+The {\bf Receiver} creates a public key and a private key as follows.
+
+1. Generate two distinct primes, $p$ and $q$. These are used to generate the private key, and they must be kept hidden. (In current practice, $p$ and $q$ are chosen to be hundreds of digits long.)
+
+2. Let $n \Coloneqq pq$.
+
+3. Select an integer $e \in[1, n)$ such that $gcd(e, (p - 1)(q - 1)) = 1$.
+
+The {\it public key} is the pair $(e, n)$. This should be distributed widely.
+
+4. Compute $d \in [1, n)$ such that $de \equiv 1 \mod (p - 1)(q - 1)$. This can be done using the Pulverizer.
+
+The {\it private key} is the pair $(d, n)$. This should be kept hidden!
+
+\subsection{Encoding} 
+To transmit a message $m \in [0, n)$ to {\bf Receiver}, a {\bf Sender} uses the public key to encrypt $m$ into a numerical message
+$$
+\hat{m} \Coloneqq rem(m^e, n)
+$$
+
+The {\bf Sender} can then publicly transmit $\hat{m}$ to the {\bf Receiver}.
+
+\subsection{Decoding} 
+The {\bf Receiver} decrypts message $\hat{m}$ back to message $m$ using the private key:
+$$
+m = rem(\hat{m}^d, n).
+$$
+
 \section{Problem 1}
+Let’s try out RSA! There is a complete description of the algorithm above. You’ll probably need extra paper. Check your work carefully!
+
 \subsection{(a)}
+Go through the beforehand steps.
+
+Choose primes $p$ and $q$ to be relatively small, say in the range 10-40. In practice, $p$ and $q$ might contain hundreds of digits, but small numbers are easier to handle with pencil and paper.
+
+Try $e = 3, 5, 7, \ldots$ until you find something that works. Use Euclid’s algorithm to compute the gcd.
+
+Find $d$ (using the Pulverizer or Euler’s Theorem).
+
+When you’re done, put your public key on the board prominentally labelled ``Public Key.'' This lets another team send you a message.
 \begin{proof}
+Let's choose $p = 13$ and $q = 19$. So $n = 247$ and $(p-1)(q-1) = 12 \cdot 18 = 216 = 2^3 \cdot 3^3$.
+
+We need $e \in[1, n)$ such that $gcd(e, 216) = 1$. $e = 5$ does the trick.
+
+PUBLIC KEY: $(5, 247)$ (this is supposed to be published).
+
+We need to find $d \in [1, n)$ such that $de = 5d \equiv 1 \mod 216$. We find that $d = 173$ does the job. Indeed: $5\cdot 173 = 865 = 864 + 1 = 216 \cdot 4 + 1 \equiv 1 \mod 216$.
+
+PRIVATE KEY: $(173, 247)$ (this is supposed to be kept secret).
 \end{proof}
 
 \subsection{(b)}
+Now send an encrypted message to another team using their public key. Select your message $m$ from the codebook below:
+
+2 = Greetings and salutations!
+
+3 = Yo, wassup?
+
+4 = You guys are slow!
+
+5 = All your base are belong to us.
+
+6 = Someone on our team thinks someone on your team is kinda cute.
+
+7 = You are the weakest link. Goodbye.
 \begin{proof}
+I am going to send message 2. So $m = 2$. I encrypt $m$ as follows:
+$$
+\hat{m} = rem(m^e, n) = rem(2^5, 247) = 32.
+$$
+\end{proof}
+
+\subsection{(c)}
+Decrypt the message sent to you and verify that you received what the other team sent!
+\begin{proof}
+So I sent my encoded message as $\hat{m} = 32$. Now the receiver will decode it using my private key:
+$$
+m = rem(\hat{m}^d, n) = rem(32^{173}, 247) = rem(2^{865}, 247)
+$$
+We can calculate this using Euler's Theorem. Notice that $2$ is relatively prime to $n = 247$. Moreover $\phi(247) = 216$, therefore by Euler's Theorem $2^{216} \equiv 1 \mod 247$.
+
+Also $865 = 4 \cdot 216 + 1$. So
+$$
+2^{865} = 2^{4 \cdot 216 + 1} = 2^{4 \cdot 216}\cdot 2^1 = 2 \cdot (2^{216})^4 \equiv 2 \cdot 1^4 \equiv 2 \mod 247
+$$
+So the receiver correctly decodes my message as $m = 2$.
 \end{proof}
 
 \section{Problem 2}
 \subsection{(a)}
+Just as RSA would be trivial to crack knowing the factorization into two primes of $n$ in the public key, explain why RSA would also be trivial to crack knowing $\phi(n)$.
 \begin{proof}
 \end{proof}
 
 \subsection{(b)}
+Show that if you knew $n$, $\phi(n)$, and that $n$ was the product of two primes, then you could easily factor $n$.
 \begin{proof}
 \end{proof}
 
 \section{Problem 3}
+A critical fact about RSA is, of course, that decrypting an encrypted message always gives back the original message, $m$. Namely, if $n = pq$ where $p$ and $q$ are distinct primes, $m \in [0..pq)$, and $d \cdot e \equiv 1 \mod (p - 1)(q - 1)$, then 
+$$
+\hat{m}^d \Coloneqq (m^e)^d = m \,\,\,\,(\mathbb{Z}_n)\,\,\,\,\,\,\,\,\,\,\, (1)
+$$
+
+We’ll now prove this.
+
 \subsection{(a)}
+Explain why (1) follows very simply from Euler's theorem when $m$ is relatively prime to $n$.
 \begin{proof}
+1. Assume $m$ is relatively prime to $n$, assume $n = pq$ where $p$ and $q$ are distinct primes, assume $m \in [0..pq)$, and assume $d \cdot e \equiv 1 \mod (p - 1)(q - 1)$.
+
+2. Want to show $m^{ed} \equiv m \mod n$.
+
+3. By Euler's Theorem $m^{\phi(n)} \equiv 1 \mod n$.
+
+4. By properties of Euler's function, $\phi(n) = \phi(pq) = \phi(p)\phi(q) = (p-1)(q-1)$.
+
+5. By (3) and (4) $m^{(p-1)(q-1)} \equiv 1 \mod n$.
+
+6. By assumption there exists an integer $k$ such that $de = k(p-1)(q-1) + 1$.
+
+7. By (6) and (5),
+$$
+m^{ed} = m^{k(p-1)(q-1) + 1} = m \cdot (m^{(p-1)(q-1)})^{k} \equiv m \cdot 1^k \equiv m \mod n.
+$$
 \end{proof}
+
+All the rest of this problem is about removing the restriction that $m$ be relatively prime to $n$. That is, we aim to prove that equation (1) holds for all $m \in [0..n)$.
+
+It is important to realize that, even if it was theoretically necessary, there would be no practical reason to worry about, or to bother to check for, this relative primality condition before sending a message $m$ using RSA. That’s because the whole RSA enterprise is predicated on the difficulty of factoring. If an $m$ ever came up that wasn’t relatively prime to $n$, then we could factor $n$ by computing $gcd(m,n)$. So believing in the security of RSA implies believing that the probability of a message $m$ turning up that was not relatively prime to $n$ is negligible.
+
+But let's be pure, impractical mathematicians and rid of this technically unnecessary relative primality side condition, even if it is harmless. One gain for doing this is that statements about RSA will be simpler without the side condition. More important, the proof below illustrates a useful general method of proving things about a number $n$ by proving them separately for the prime factors of $n$.
 
 \subsection{(b)}
+Prove that if $p$ is prime and $a \equiv 1 \mod (p - 1)$, then
+$$
+m^a = m \,\,\,\,(\mathbb{Z}_p) \,\,\,\,\,\,\,\,\,\,(2)
+$$
 \begin{proof}
+If $p \mid m$, then equation (2) holds since both sides of the congruence are $\equiv 0 (\mod p)$.
+
+So assume $p$ does not divide $m$. Now $a = 1 + (p - 1)k$ for some $k$, so
+$$
+\begin{array}{cclr}
+m^a & = & m^{1+(p-1)k} & \\
+& = & m \cdot (m^{p-1})^k & \\
+& \equiv & m \cdot (1)^k \mod p & \text{(by Fermat's Little Theorem)}\\
+& \equiv & m \mod p & \\
+\end{array}
+$$
 \end{proof}
 
-\section{Problem 4}
-\subsection{(a)}
+\subsection{(c)}
+Give an elementary proof that if $a \equiv b \mod p_i$ for distinct primes $p_i$, then $a \equiv b$ modulo the product of these primes. (There is no need to appeal to the Chinese Remainder Theorem.)
 \begin{proof}
+By definition of congruence, $a \equiv b (\mod k)$ iff $k \mid (a - b)$. So if $a \equiv b (\mod p)$ for each prime factor, $p$, of $n$, then $p \mid (a - b)$ for each prime factor, $p$, and hence, so does their product (by the Unique Factorization Theorem). That is, $n \mid (a - b)$, which means $a \mid b (\mod n)$.
 \end{proof}
 
-\subsection{(b)}
-\begin{proof}
-\end{proof}
+\subsection{(d)}
+Note that (1) is a special case of:
 
-\section{Problem 5}
-\subsection{(a)}
-\begin{proof}
-\end{proof}
+{\bf Claim.} If $n$ is a product of distinct primes and $a \equiv 1 \mod \phi(n)$, then $m^a = m \,\,\,\,(\mathbb{Z}_n)$.
 
-\subsection{(b)}
+Use the previous parts to prove the Claim.
 \begin{proof}
+1. Assume $n$ is a product of distinct primes, $p_1, p_2, \ldots, p_k$.
+
+2. By properties of Euler's function
+$$
+\phi(n) = (p_1 - 1)(p_2 - 1)\ldots(p_k - 1)
+$$
+
+3. By (2) and $a \equiv 1 \mod \phi(n)$, we have $a \equiv 1 \mod (p_i - 1)$ for all $1 \leq i \leq k$.
+
+4. By (3) and part (b), for all $m$ we have $m^a \equiv m \mod p_i$ for all $1 \leq i \leq k$.
+
+5. By (4) and part (c) for all $m$ we have $m^a \equiv m \mod n$.
 \end{proof}
 \end{document}
