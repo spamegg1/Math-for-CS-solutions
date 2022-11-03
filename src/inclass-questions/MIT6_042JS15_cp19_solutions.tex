@@ -81,27 +81,19 @@ In part (b) we found that $m < f$ so there cannot be an injective function from 
 \subsection{(a)}
 Prove that in every simple graph, there are an even number of vertices of odd degree.
 \begin{proof}
-1. Assume $G = (V, E)$ is a simple graph and assume $|E| = n$.
+Partitioning the vertices into those of even degree and those of odd degree, we know
 
-2. The sum of the degrees of all the vertices in $V$ is $2n$. (Each edge is connected to two vertices.)
+$$
+\sum_{v \in V} deg(v) = \sum_{deg(v) \text{ is even}} deg(v) +\sum_{deg(v) \text{ is odd}} deg(v)
+$$
 
-3. $V$ can be separated into two disjoint subsets: $V_1 \subseteq V$ of vertices with odd degree, and $V_2 \subseteq V$ of vertices with even degree.
-
-4. Then $\sum_{v \in V} deg(v) = \sum_{v \in V_1} deg(v) + \sum_{v \in V_2} deg(v) = 2n$.
-
-5. Notice that $\sum_{v \in V_2} deg(v)$ is an even number (because every vertex in $V_2$ has even degree). Say it equals $2k$.
-
-6. Therefore $\sum_{v \in V_1} deg(v) = 2n - \sum_{v \in V_2} deg(v) = 2n - 2k$ is also even.
-
-7. So $|V_1|$ must be even: if $|V_1|$ is odd, then $\sum_{v \in V_1} deg(v)$ would also be odd (adding up an odd number of odd numbers results in an odd sum), a contradiction.
+By the Handshaking Lemma, the value of the lefthand side of this equation equals twice the num­ber of edges, and so is even. The first summand on the righthand side is even since it is a sum of even values. So the second summand on the righthand side must also be even. But since it is entirely a sum of odd values, it must must contain an even number of terms. That is, there must be an even number of vertices with odd degree.
 \end{proof}
 
 \subsection{(b)}
 Conclude that at a party where some people shake hands, the number of people who shake hands an odd number of times is an even number.
 \begin{proof}
-The people who shake hands form a simple graph under the hand-shaking relation. The people are the vertices, and there is an edge between two people if they shook hands. How many times a person shook hands corresponds to the degree of a vertex.
-
-Therefore by part (a), the number of people who shook hands an odd number of times is odd.
+We can represent the people at the party by the vertices of a graph. If two people shake hands, then there is an edge between the corresponding vertices. So the degree of a vertex is the number of handshakes the corresponding person performed. The result in the first part of this problem now implies that there are an even number of odd-degree vertices, which translates into an even number of people who shook an odd number of hands.
 \end{proof}
 
 \subsection{(c)}
@@ -109,7 +101,7 @@ Call a sequence of people at the party a handshake sequence if each person in th
 
 Suppose George was at the party and has shaken hands with an odd number of people. Explain why, starting with George, there must be a handshake sequence ending with a different person who has shaken an odd number of hands.
 \begin{proof}
-???
+The handshake graph between just the people at the ends of handshake sequences that start with George is a graph, so by part (b), it must have an even number of people who shake an odd number of hands. In particular, there must be at least one other person besides George, call him Harry, who has also shaken an odd number of hands. So the handshake sequence from George that ends with Harry is what we were looking for.
 \end{proof}
 
 \section{Problem 3}
