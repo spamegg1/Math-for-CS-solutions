@@ -6,57 +6,249 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{lemma}{Lemma}
+\newcommand{\dps}{\displaystyle}
 \hypersetup{colorlinks,allcolors=blue,linktoc=all}
 \geometry{a4paper} 
 \geometry{margin=0.5in}
-\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 10, Mon. (Session 24)''}
 \author{https://github.com/spamegg1}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Problem 1}
+Recall that for functions $f, g$ on $\mathbb{N}$, $f = O(g)$ iff
+
+$$
+\exists c \in \mathbb{N} \,\, \exists n_0 \in \mathbb{N} \,\, \forall n \geq n_0 \,\, ( c \cdot g(n) \geq |f(n)|) \,\,\,\,\,\,\,\,\,\,(1)
+$$
+
+For each pair of functions below, determine whether $f = O(g)$ and whether $g = O(f)$. In cases where one function is $O()$ of the other, indicate the {\it smallest nonnegative integer, c,} and for that smallest $c$, the {\it smallest corresponding nonnegative integer} $n_0$ ensuring that condition (1) applies.
 \subsection{(a)}
+$f(n) = n^2, g(n) = 3n$
 \begin{proof}
+In this case $f \neq O(g)$ (because $n^2$ dominates $n$), and $g = O(f)$, with $c = 1$, $n_0 = 3$.
 \end{proof}
 
 \subsection{(b)}
+$f(n) = (3n-7)/(n+4), g(n) = 4$
 \begin{proof}
+In this case $f = O(g)$ with $c = 1$, $n_0 = 0$ because $|f(n)| < 3$ for all $n \in \mathbb{N}$.
+
+Also $g = O(f)$ with $c = 2, n_0 = 15$. Since $\dps\lim_{n\to\infty} f(n) = 3$, the smallest possible $c$ is 2. For $c = 2$, the smallest possible $n_0 = 15$ which follows from the requirement that $2 f(n_0) \geq 4$.
+\end{proof}
+
+\subsection{(c)}
+$f(n) = 1+(n\sin(n\pi / 2))^2, g(n) = 3n$
+\begin{proof}
+Notice $g = \Theta(n)$.
+
+$f \neq O(g)$ because $f(2n+1) = n^2+1$ for all $n \in \mathbb{N}$ but $g = \Theta(n)$. $n^2$ cannot be bounded by a constant multiple of $n$.
+
+$g \neq O(f)$ because $f(2n) = 1$ for all $n \in \mathbb{N}$ but $g = \Theta(n)$. $n$ cannot be bounded by a constant.
 \end{proof}
 
 \section{Problem 2}
 \subsection{(a)}
+Indicate which of the following asymptotic relations below on the set of nonnegative real-valued functions are equivalence relations (E), strict partial orders (S), weak partial orders (W), or none of the above (N).
+
+\subsubsection{}
+$f \sim g$, the ``asymptotically equal'' relation.
+
+{\bf Solution.} (E)
+
 \begin{proof}
+$f \sim f$ because $\dps\lim_{x\to\infty}f(x)/f(x) = 1$. So the relation is reflexive.
+
+If $f \sim g$ then $\dps\lim_{x\to\infty}f(x)/g(x) = 1$. Then $\dps\lim_{x\to\infty}g(x)/f(x) = 1$. So the relation is symmetric.
+
+If $f \sim g$ and $g \sim h$ then $\dps\lim_{x\to\infty}f(x)/g(x) = 1$ and $\dps\lim_{x\to\infty}g(x)/h(x) = 1$. Then $\dps\lim_{x\to\infty}f(x)/h(x) =\lim_{x\to\infty} (f(x)/g(x))/(g(x)/h(x)) = \lim_{x\to\infty} (f(x)/g(x)) \cdot \lim_{x\to\infty} (g(x)/h(x)) = 1/1 = 1$. So the relation is transitive.
+\end{proof}
+
+\subsubsection{}
+$f = o(g)$, the ``little Oh'' relation.
+
+{\bf Solution.} (S)
+
+\begin{proof}
+For any $f$, we have $\dps\lim_{x\to\infty}f(x)/f(x) = 1 \neq 0$, hence $f \neq o(f)$, so the relation is irreflexive.
+
+If $f = o(g)$ and $g = o(h)$ then $\dps\lim_{x\to\infty}f(x)/g(x) = 0$ and $\dps\lim_{x\to\infty}g(x)/h(x) = 0$.
+
+Assume $\epsilon > 0$. There exist $x_1$ and $x_2$ such that
+
+for all $x > x_1$ we have $\dps\frac{f(x)}{g(x)} < \sqrt{\epsilon}$, and for all $x > x_2$ we have $\dps\frac{g(x)}{h(x)} < \sqrt{\epsilon}$. 
+
+Then for all $x > \max(x_1, x_2)$ we have $\dps \frac{f(x)}{h(x)} = \frac{f(x)}{g(x)} \cdot \frac{g(x)}{h(x)} < \sqrt{\epsilon} \cdot \sqrt{\epsilon} = \epsilon$.
+
+So $\dps\lim_{x\to\infty}f(x)/h(x) = 0$. So the relation is transitive.
+\end{proof}
+
+\subsubsection{}
+$f = O(g)$, the ``big Oh'' relation.
+
+{\bf Solution.} (N)
+
+\begin{proof}
+The relation is reflexive: $f = O(f)$ (just take $C = 1$).
+
+The relation is transitive: assume $f = O(g)$ and $g = O(h)$. There exist $x_0, x_1$ and constants $C, D$ such that $f(x) \leq Cg(x)$ for all $x \geq x_0$, and $g(x) \leq Dh(x)$ for all $x \geq x_1$. Let $x_2 = \max(x_0, x_1)$ and $E = CD$. Then for all $x \geq x_2$ we have $f(x) \leq Eh(x)$ so $f = O(h)$.
+
+The relation is not symmetric: $x = O(x^2)$ but $x^2 \neq O(x)$.
+
+The relation is not asymmetric: $f = O(f)$ is true but it does not imply NOT$(f = O(f))$ (which is false).
+
+The relation is not antisymmetric: let $f(x) = x$ and $g(x) = 2x$ so $f \neq g$. We have $f = O(g)$ but this does not imply NOT$(g \neq O(f))$, because $g = O(f)$ is also true.
+\end{proof}
+
+\subsubsection{}
+$f = \Theta(g)$, the ``Theta'' relation.
+
+{\bf Solution.} (E)
+
+\begin{proof}
+$f = \Theta(f)$ because $f = O(f)$ (take $C = 1$). So the relation is reflexive.
+
+Assume $f = \Theta(g)$. Then by definition $f = O(g)$ and $g = O(f)$. This implies $g = \Theta(f)$. So the relation is symmetric.
+
+Assume $f = \Theta(g)$ and $g = \Theta(h)$. Then by definition $f = O(g)$ and $g = O(f)$, and $g = O(h)$ and $h = O(g)$. Since big-O is transitive (as shown above), $f = O(g)$ and $g = O(h)$ imply $f = O(h)$. Similarly $h = O(g)$ and $g = O(f)$ imply $h = O(f)$. So $f = \Theta(h)$. Therefore the relation is transitive.
+\end{proof}
+
+\subsubsection{}
+$f = O(g)$ AND NOT$(g = O(f))$.
+
+{\bf Solution.} (S)
+
+\begin{proof}
+This relation is clearly irreflexive: $f = O(f)$ AND NOT$(f = O(f))$ is not possible.
+
+It is also transitive: assume $f = O(g)$ AND NOT$(g = O(f))$, and $g = O(h)$ AND NOT$(h = O(g))$. Because big-O is transitive (shown above) we have $f = O(h)$. We need to show NOT$(h = O(f))$. Argue by contradiction and assume $h = O(f)$. Since $f = O(g)$, by transitivity $h = O(g)$ which contradicts NOT$(h = O(g))$. So our assumption was false, and NOT$(h = O(f))$ is true.
 \end{proof}
 
 \subsection{(b)}
+Indicate the implications among the assertions in part (a). For example, $f = o(g)$ IMPLIES $f = O(g)$.
 \begin{proof}
+There are 5 assertions: \\
+(1) $f \sim g$,\\ (2) $f = o(g)$,\\ (3) $f = O(g)$,\\ (4) $f = \Theta(g)$,\\ (5) $f = O(g)$ AND NOT$(g = O(f))$.
+
+There is no relation between (1) and (2): (1) says that a limit is 1, (2) says the same limit is 0.
+
+By Lemma 13.7.7, (1) implies (3). 
+
+(1) implies (4): if $\lim f/g = 1$ then $f = O(g)$ and $g = O(f)$ (just take $C = 1$), so $f = \Theta(g)$. However (4) does not imply (1): again we can use the above example, we see $x = \Theta(2x)$ but $1/2 \neq 1$ so $x \not\sim 2x$.
+
+There is no relation between (1) and (5): $f \sim g$ implies both $f = O(g)$ and $g = O(f)$.
+
+By Lemma 13.7.7, (2) implies (3). But (3) does not imply (2): for example $f(x) = x$, $g(x) = 2x$ so $C=2$ shows $f = O(g)$ but $\lim f/g = 1/2 \neq 0$, therefore $f \neq o(g)$. Same example shows (3) does not imply (1) because $1/2 \neq 1$.
+
+There is no relation between (2) and (4): we have $x = o(x^2)$ but $x \neq \Theta(x^2)$. Again similar to above, $x = \Theta(2x)$ but $x \neq o(2x)$ because $1/2 \neq 0$.
+
+(2) and (5) are equivalent: $\lim f/g = 0$ iff $\lim f/g$ is finite and $\lim g/f = infty$, iff $f = O(g)$ and NOT$(g = O(f))$.
+
+(4) clearly implies (3) by definition of big-Theta, but (3) does not imply (4): we have $x = O(x^2)$ but $x \neq \Theta(x^2)$.
+
+(5) clearly implies (3) but not vice versa.
+
+There is no relation between (5) and (4), because $f = \Theta(g)$ iff $f = O(g)$ AND $g = O(f)$.
+
+We can summarize as follows:
+$$
+\begin{array}{rcc}
+1&\longrightarrow&4\\
+&\searrow&\downarrow\\
+(2 \leftrightarrow 5)&\longrightarrow&3\\
+\end{array}
+$$
 \end{proof}
 
 \section{Problem 3}
-\subsection{(a)}
+{\bf False Claim.} $2^n = O(1)$. \,\,\,\,\,\,(2)
+
+Explain why the claim is false. Then identify and explain the mistake in the following bogus proof.
+
+{\it Bogus proof.} The proof is by induction on $n$ where the induction hypothesis, $P(n)$, is the assertion (2).
+
+{\bf base case:} $P(0)$ holds trivially.
+
+{\bf inductive step:} We may assume $P(n)$, so there is a constant $c > 0$ such that $2^n \leq c \cdot 1$. Therefore,
+$$
+2^{n+1} = 2 \cdot 2^n \leq (2c) \cdot 1
+$$
+which implies that $2^{n+1} = O(1)$. That is, $P(n + 1)$ holds, which completes the proof of the inductive step. 
+
+We conclude by induction that $2^{n} = O(1)$ for all $n$. That is, the exponential function is bounded by a constant.
+
 \begin{proof}
+A function is $O(1)$ iff it is bounded by a constant, and since the function $2^n$ grows unboundedly with $n$, it is not $O(1)$.
+
+The mistake in the bogus proof is in its misinterpretation of the expression $2^n$ in assertion (2). The intended interpration of (2) is
+
+\begin{center}
+Let $f$ be the function defined by the rule $f(n) \Coloneqq 2^n$. Then $f = O(1)$. \,\,\,\,\,\,\,\,(3)
+\end{center}
+
+But the bogus proof treats (2) as an assertion, $P(n)$, about $n$. Namely, it misinterprets (2) as mean­ing:
+\begin{center}
+Let $f_n$ be the constant function equal to $2^n$. That is, $f_n(k) \Coloneqq 2^n$ for all $k \in \mathbb{N}$. Then 
+$$
+f_n = O(1)\,\,\,\,\,\,\,\,\,\,(4)
+$$
+\end{center}
+
+Now (4) is true since every constant function is $O(1)$, and the bogus proof is an unnecessarily complicated, but correct, proof that that for each $n$, the constant function $f_n$ is $O(1)$. But in the last line, the bogus proof switches from the misinterpretation (4) and claims to have proved (3).
+
+So you could say that the exact place where the proof goes wrong is in its first line, where it defines $P(n)$ based on misinterpretation (4). Alternatively, you could say that the proof was a correct proof (of the misinterpretation), and its first mistake was in its last line, when it switches from the misinterpretation to the proper interpretation (3).
 \end{proof}
 
-\subsection{(b)}
+\section{Problem 4 (Supplemental problem)}
+Assign true or false for each statement and prove it.
+
+\subsection{(a)} $n^2 \sim n^2 + n$
 \begin{proof}
+True:
+$$
+\lim_{n\to\infty} \frac{n^2}{n^2+n} = \lim_{n\to\infty} \frac{1}{1+\frac{1}{n}} = \frac{1}{1+0} = 1
+$$
 \end{proof}
 
-\section{Problem 4}
-\subsection{(a)}
+\subsection{(b)} $3^n = O(2^n)$
 \begin{proof}
+False. For every $n_0$ and every positive constant $C$ we can find $n \geq n_0$ such that $3^n \geq C \cdot 2^n$. For example, we can let $n = \max(n_0, \lceil\frac{\log C}{\log (3/2)}\rceil + 1)$.
 \end{proof}
 
-\subsection{(b)}
+\subsection{(c)} $n^{\sin(n\pi/2) + 1} = o(n^2)$
 \begin{proof}
+False. 
+
+The limit $\dps\lim_{n \to \infty} \frac{n^{\sin(n\pi/2) + 1}}{n^2}$ does not exist, because $n^{\sin(n\pi/2) + 1}$ oscillates between $n, n^2$ and $-n^2$; so $\dps\frac{n^{\sin(n\pi/2) + 1}}{n^2}$ oscillates between $0, 1, -1$.
 \end{proof}
 
-\section{Problem 5}
-\subsection{(a)}
+\subsection{(d)} $\dps n = \Theta\left(\frac{3n^3}{(n+1)(n-1)}\right)$
 \begin{proof}
+True. $\dps n = O\left(\frac{3n^3}{(n+1)(n-1)}\right)$ by choosing $C = 1/3$, and $\dps\frac{3n^3}{(n+1)(n-1)}=O(n)$ by choosing $C = 3$.
 \end{proof}
 
-\subsection{(b)}
+\section{Problem 5 (Supplemental problem)}
+Give an elementary proof (without appealing to Stirling’s formula) that $\log(n!) = \Theta(n \log n)$.
 \begin{proof}
+One elementary proof goes as follows: First,
+$$
+\log(n!) = \sum_{i=1}^n \log(i) < \sum_{i=1}^n \log(n) = n\log(n)
+$$
+On the other hand,
+$$
+\begin{array}{rcl}
+\log(n!) &=&\dps \sum_{i=1}^n \log(i) \\
+&>&\dps\sum_{i=\lceil(n+1)/2\rceil}^n \log(i)\\
+&>&\dps\sum_{i=\lceil(n+1)/2\rceil}^n \log(n/2)\\
+&>&\dps\frac{n}{2}\cdot\log(n/2)\\
+&=&\dps\frac{n\log(n)}{2} - \frac{n}{2}\\
+
+&>&\dps\frac{n\log(n)}{2} - \frac{n\log(n)}{6}\,\,\,\,\,\,\,\,\,\,\text{(for } n>8)\\
+&=&\dps n\log(n)/3\\
+\end{array}
+$$
+
+Therefore $(1/3)n\log(n) < \log(n!) < n\log(n)$ for $n > 8$, proving $\log(n!) = \Theta(n \log n)$.
 \end{proof}
 \end{document}
