@@ -6,57 +6,306 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{lemma}{Lemma}
+\newcommand{\dps}{\displaystyle}
 \hypersetup{colorlinks,allcolors=blue,linktoc=all}
 \geometry{a4paper} 
 \geometry{margin=0.5in}
-\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 11, Wed. (Session 26)''}
 \author{https://github.com/spamegg1}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Problem 1}
+Your class tutorial has 12 students, who are supposed to break up into 4 groups of 3 students each. Your Teaching Assistant (TA) has observed that the students waste too much time trying to form balanced groups, so he decided to pre-assign students to groups and email the group assignments to his students.
+
 \subsection{(a)}
+Your TA has a list of the 12 students in front of him, so he divides the list into consecutive groups of 3. For example, if the list is ABCDEFGHIJKL, the TA would define a sequence of four groups to be $(\{A,B,C\},\{D,E,F\},\{G,H,I\},\{J,K,L\})$. This way of forming groups defines a mapping from a list of twelve students to a sequence of four groups. This is a $k$-to-1 mapping for what $k$?
 \begin{proof}
+Two lists map to the same sequence of groups iff the first 3 students are the same on both lists, and likewise for the second, third, and fourth consecutive sublists of 3 students. So for a given sequence of 4 groups, the number of lists which map to it is
+$(3!)^4$ because there are $3!$ ways to order the students in each of the 4 consecutive sublists.
 \end{proof}
 
 \subsection{(b)}
+A group assignment specifies which students are in the same group, but not any order in which the groups should be listed. If we map a sequence of 4 groups,
+$$
+(\{A,B,C\},\{D,E,F\},\{G,H,I\},\{J,K,L\})
+$$
+into a group assignment
+$$
+\{\{A,B,C\},\{D,E,F\},\{G,H,I\},\{J,K,L\}\}
+$$
+the mapping is $j$-to-1 for what $j$?
 \begin{proof}
+$j = 4!$. Each of the $4!$ sequences of a particular set of four groups maps to that set of groups.
+\end{proof}
+
+\subsection{(c)}
+How many group assignments are possible?
+\begin{proof}
+$\dps\frac{12!}{4!\cdot (3!)^4} = 15400$ different assignments.
+
+There are $12!$ possible lists of students, and we can map each list to an assignment by first mapping the list to a sequence of four groups, and then mapping the sequence to the assignment. Since the first map is $(3!)^4$-to-1 and the second is $4!$-to-1, the composite map is $(3!)^4\cdot 4!$-to-1. So by the Division Rule, $12! = ((3!)^4 \cdot 4!) A$ where $A$ is the number of assignments.
+\end{proof}
+
+\subsection{(d)}
+In how many ways can $3n$ students be broken up into $n$ groups of 3?
+\begin{proof}
+$\dps\frac{(3n)!}{(3!)^n \cdot n!}$. This follows simply by replacing “12” by “$3n$” and “4” by “$n$” in the solution to the previous problem parts.
 \end{proof}
 
 \section{Problem 2}
 \subsection{(a)}
+There are 30 books arranged in a row on a shelf. In how many ways can eight of these books be selected so that there are at least two unselected books between any two selected books?
 \begin{proof}
+Consider a binary string where ones represent the selected books. Here's one example with 4 unselected books at left and right ends:
+$$
+000010010010010010010010010000
+$$
+If any two selected books (ones) have at least two unselected books (zeroes) between them, there are at least 14 zeroes that are between the ones. Adding the 8 ones, we get 22 binary digits. 
+
+This leaves 30 - 22 = 8 more zeroes that can be interspersed anywhere. For example we could put all 8 zeros on the left:
+$$
+000000001001001001001001001001
+$$
+or all on the right:
+$$
+100100100100100100100100000000
+$$
+or spread them in between the ``100'' blocks:
+$$
+100\,\,0\,\,100\,\,0\,\,100\,\,0\,\,100\,\,0\,\,100\,\,0\,\,100\,\,0\,\,100\,\,0\,\,1\,\,0
+$$
+These are just a few examples to get the idea across.
+
+Consider the length 16 binary strings, that are obtained from the strings we want (above) by deleting the 14 zeroes in between the ones. Here's one example:
+$$
+00001\underline{00}1\underline{00}1\underline{00}1\underline{00}1\underline{00}1\underline{00}1\underline{00}10000
+$$
+$$
+00001\,\,1\,\,1\,\,1\,\,1\,\,1\,\,1\,\,10000
+$$
+In these length 16 strings we can place the 8 ones and the remaining 8 zeroes in any way we like. (The deleted zeroes are ``there'' invisibly, taking care of the ``there must be at least two unselected books between any two selected books'' rule for us.)
+
+So there is a bijection between the book selections described in the problem, and the set of length 16 binary strings with 8 ones.
+
+Therefore the answer is $\dps\binom{16}{8}$.
 \end{proof}
 
 \subsection{(b)}
+How many nonnegative integer solutions are there for the following equality?
+$$
+x_1 + x_2 + \ldots + x_m = k
+$$
 \begin{proof}
+There is a bijection between the set of solutions to this equality
+$$
+\{(x_1, \ldots, x_m) \in \mathbb{N}^m \,\,\,|\,\,\,x_1 + \ldots + x_m = k\}
+$$ 
+and the set of binary strings with $k$ zeroes and $m-1$ ones. Let $0^x$ denote a sequence of $x$ zeroes. Here is the bijection:
+$$
+(x_1, \ldots, x_m) \longleftrightarrow 0^{x_1} \,1\, \ldots 0^{x_{m-1}} \,1\, 0^{x_m}
+$$
+Here there are $k$ zeroes because $x_1 + x_2 + \ldots + x_m = k$, and there are $m-1$ ones because the ones are separators between the $m$ sequences of zeroes.
+
+The number of such binary strings is $\dps\binom{k+m-1}{m-1}$.
+\end{proof}
+
+\subsection{(c)}
+How many nonnegative integer solutions are there for the following inequality?
+$$
+x_1 + x_2 + \ldots + x_m \leq k
+$$
+\begin{proof}
+Remember that in the In-Class Problems 25, we described a bijection between the set $S_{k,m}$ of solutions to this inequality, and the set of binary strings with $k$ zeroes and $m$ ones. So we simply need to count that set of binary strings.
+
+The number of such binary strings is $\dps\binom{k+m}{m}$.
+\end{proof}
+
+\subsection{(d)}
+How many length $m$ weakly increasing sequences of nonnegative integers $\leq k$ are there?
+\begin{proof}
+Remember that in the In-Class Problems 25, we described a bijection between the set $S_{k,m}$ of solutions to the inequality in part (c), and the set $L_{k,m}$ of length $m$ weakly increasing sequences of nonnegative integers $\leq k$.
+
+So the answer is the same as part (c): $\dps\binom{k+m}{m}$.
 \end{proof}
 
 \section{Problem 3}
+The Tao of BOOKKEEPER: we seek enlightenment through contemplation of the word $BOOKKEEPER$.
+
 \subsection{(a)}
+In how many ways can you arrange the letters in the word $POKE$?
 \begin{proof}
+There are $4!$ arrangements corresponding to the $4!$ permutations of the set $\{P, O, K, E\}$.
 \end{proof}
 
 \subsection{(b)}
+In how many ways can you arrange the letters in the word $BO_1 O_2 K$? Observe that we have subscripted the O’s to make them distinct symbols.
 \begin{proof}
+There are $4!$ arrangements corresponding to the $4!$ permutations of the set $\{B, O_1 , O_2 , K\}$.
+\end{proof}
+
+\subsection{(c)}
+Suppose we map arrangements of the letters in $BO_1 O_2 K$ to arrangements of the letters in $BOOK$ by erasing the subscripts. Indicate with arrows how the arrangements on the left are mapped to the arrangements on the right.
+$$
+\begin{array}{cccc}
+O_2 B O_1 K & & &\\
+KO_2 BO_1   & & &\\
+O_1 BO_2 K  & & &BOOK\\
+KO_1 BO_2   & & &OBOK\\
+BO_1 O_2 K  & & &KOBO\\
+BO_2 O_1 K  & & &\ldots\\
+\ldots      & & &
+\end{array}
+$$
+
+\begin{proof}
+Lines 1 and 3 on the left map to $OBOK$, lines 2 and 4 map to $KOBO$, lines 5 and 6 map to $BOOK$.
+\end{proof}
+
+\subsection{(d)}
+What kind of mapping is this, young grasshopper?
+\begin{proof}
+2-to-1.
+\end{proof}
+
+\subsection{(e)}
+In light of the Division Rule, how many arrangements are there of $BOOK$?
+\begin{proof}
+$4! / 2$
+\end{proof}
+
+\subsection{(f)}
+Very good, young master! How many arrangements are there of the letters in\\ $KE_1 E_2 PE_3 R$?
+\begin{proof}
+$6!$
+\end{proof}
+
+\subsection{(g)}
+Suppose we map each arrangement of $KE_1 E_2 PE_3 R$ to an arrangement of $KEEPER$ by erasing subscripts. List all the different arrangements of $KE_1 E_2 PE_3 R$ that are mapped to $REPEEK$ in this way.
+\begin{proof}
+$$
+\begin{array}{c}
+RE_1 P E_2 E_3 K\\ 
+RE_1 P E_3 E_2 K\\ 
+RE_2 P E_1 E_3 K\\ 
+RE_2 P E_3 E_1 K\\ 
+RE_3 P E_1 E_2 K\\ 
+RE_3 P E_2 E_1 K
+\end{array}
+$$
+\end{proof}
+
+\subsection{(h)}
+What kind of mapping is this?
+\begin{proof}
+$3! = 6$, so it's 6-to-1.
+\end{proof}
+
+\subsection{(i)}
+So how many arrangements are there of the letters in $KEEPER$?
+\begin{proof}
+$6!/3!$
+\end{proof}
+
+{\it Now you are ready to face the BOOKKEEPER!}
+
+\subsection{(j)}
+How many arrangements of $BO_1 O_2 K_1 K_2 E_1 E_2 PE_3 R$ are there?
+\begin{proof}
+$(10)!$
+\end{proof}
+
+\subsection{(k)}
+How many arrangements of $BOOK_1 K_2 E_1 E_2 PE_3 R$ are there?
+\begin{proof}
+$(10)! / 2!$
+\end{proof}
+
+\subsection{(l)}
+How many arrangements of $BOOKKE_1 E_2 PE_3 R$ are there?
+\begin{proof}
+$(10)! / (2! \cdot 2!)$
+\end{proof}
+
+\subsection{(m)}
+How many arrangements of $BOOKKEEPER$ are there?
+\begin{proof}
+$$
+\binom{10}{1,2,2,3,1,1} \Coloneqq \frac{(10)!}{1!2!2!3!1!1!} = \frac{(10)!}{(2!)^2 \cdot 3!}
+$$
+\end{proof}
+
+\begin{center}
+{\it Remember well what you have learned: subscripts on, subscripts off.
+
+This is the Tao of Bookkeeper.}
+\end{center}
+
+\subsection{(n)}
+How many arrangements of $VOODOODOLL$ are there?
+\begin{proof}
+$$
+\binom{10}{1,2,5,2} \Coloneqq \frac{(10)!}{1!2!5!2!}
+$$
+\end{proof}
+
+\subsection{(o)}
+How many length 52 sequences of digits contain exactly 17 two’s, 23 fives, and 12 nines?
+\begin{proof}
+$$
+\binom{52}{17,23,12} \Coloneqq \frac{(52)!}{(17)!(23)!(12)!}
+$$
 \end{proof}
 
 \section{Problem 4}
+Find the coefficients of
+
 \subsection{(a)}
+$x^5$ in $(1 + x)^{11}$
 \begin{proof}
+By the Binomial Theorem $\dps (1 + x)^{11} = \sum_{i = 0}^{11} \binom{11}{i}x^i$. So $x^5$ has coefficient $\binom{11}{5}$.
 \end{proof}
 
 \subsection{(b)}
+$x^8y^9$ in $(3x+2y)^{17}$
 \begin{proof}
+By the Binomial Theorem 
+$$
+(3x + 2y)^{17} = \sum_{i = 0}^{17} \binom{17}{i}(3x)^i (2y)^{17-i}
+$$ 
+$x^8y^9$ corresponds to $i = 8$. So it has coefficient $\binom{17}{8}\cdot 3^8 \cdot 2^9$.
+\end{proof}
+
+\subsection{(c)}
+$a^6b^6$ in $(a^2+b^3)^5$
+\begin{proof}
+By the Binomial Theorem 
+$$
+(a^2 + b^3)^{5} = \sum_{i = 0}^{5} \binom{5}{i}(a^2)^i (b^3)^{5-i}
+$$ 
+$a^6b^6$ corresponds to $i = 3$. So it has coefficient $\binom{5}{3}$.
 \end{proof}
 
 \section{Problem 5}
 \subsection{(a)}
+An independent living group is hosting nine new candidates for membership. Each candidate must be assigned a task: 1 must wash pots, 2 must clean the kitchen, 3 must clean the bathrooms, 1 must clean the common area, and 2 must serve dinner. Write a multinomial coefficient for the number of ways this can be done.
 \begin{proof}
+There is a bijection from sequences containing one $P$, two $K$’s, three $B$’s, a $C$, and two $D$’s. In any such sequence, the letter in the ith position specifies the task assigned to the $i$th candidate. Therefore, the number of possible assignments is:
+$$
+\binom{9}{1,2,3,1,2} \Coloneqq \frac{9!}{1!2!3!1!2!}
+$$
 \end{proof}
 
 \subsection{(b)}
+How many nonnegative integers less than 1,000,000 have exactly one digit equal to 9 and have a sum of digits equal to 17?
 \begin{proof}
+We identify the nonnegative integers less than 1,000,000 with the length 6 strings of decimal digits. Then there is a bijection with pairs:
+
+\begin{center}
+(position of the 9, successive values of other 5 digits)
+\end{center}
+
+The sum of the other 5 digits is equal to 8, so the number of ways to choose their values is equal to the number of solutions over the nonnegative integers to (1), namely, $\binom{12}{4}$. So by the product rule there are $6\cdot \binom{12}{4}$ such integers.
 \end{proof}
 \end{document}
