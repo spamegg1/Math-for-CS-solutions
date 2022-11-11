@@ -6,57 +6,165 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{lemma}{Lemma}
+\newcommand{\dps}{\displaystyle}
 \hypersetup{colorlinks,allcolors=blue,linktoc=all}
 \geometry{a4paper} 
 \geometry{margin=0.5in}
-\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 11, Fri. (Session 27)''}
 \author{https://github.com/spamegg1}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Problem 1}
+Solve the following problems using the pigeonhole principle. For each problem, try to identify the pigeons, the pigeonholes, and a rule assigning each pigeon to a pigeonhole.
+
 \subsection{(a)}
+In a certain Institute of Technology, every ID number starts with a 9. Suppose that each of the 75 students in a class sums the nine digits of their ID number. Explain why two people must arrive at the same sum.
 \begin{proof}
+The students are the pigeons, the possible sums are the pigeonholes, and we map each student to the sum of the digits in his or her MIT ID number. Every sum is in the range from $9 + 8 \cdot 0 = 9$ to $9 + 8 \cdot 9 = 81$, which means that there are 73 pigeonholes. Since there are more pigeons than pigeonholes, there must be two pigeons in the same pigeonhole; in other words, there must be two students with the same sum.
 \end{proof}
 
 \subsection{(b)}
+In every set of 100 integers, there exist two whose difference is a multiple of 37.
 \begin{proof}
+The pigeons are the 100 integers. The pigeonholes are the numbers 0 to 36. Map integer $k$ to $rem(k, 37)$. Since there are 100 pigeons and only 37 pigeonholes, two pigeons must go in the same pigeonhole. This means $rem(k_1 , 37) = rem(k_2 , 37)$, which implies that $k_1 - k_2$ is a multiple of 37.
+\end{proof}
+
+\subsection{(c)}
+For any five points inside a unit square (not on the boundary), there are two points at distance less than $1/\sqrt{2}$.
+\begin{proof}
+The pigeons are the points. The pigeonholes are the four subsquares of the unit square, each of side length 1/2.
+
+Pigeons are assigned to the subsquare that contains them, except that if the pigeon is on a bound­ary, it gets assigned to the leftmost and then lowest possible subsquare that includes it (so the point at (1/2, 1/2) is assigned to the lower left subsquare).
+
+There are five pigeons and four pigeonholes, so more than one point must be in the same subsquare. The diagonal of a subsquare is $1/\sqrt{2}$, so two pigeons in the same hole are at most this distance. But pigeons must be inside the unit square, so two pigeons cannot be at the opposite ends of the same subsquare diagonal. So at least one of them must be inside the subsquare, so their distance is less than the length of the diagonal.
+\end{proof}
+
+\subsection{(d)}
+Show that if $n + 1$ numbers are selected from $\{1, 2, 3, \ldots , 2n\}$, two must be consecutive, that is, equal to $k$ and $k + 1$ for some $k$.
+\begin{proof}
+The pigeonholes will be the $n $sets $\{1, 2\} , \{3, 4\} , \{5, 6\} , \ldots , \{2n - 1, 2n\}$. The pigeons will be the $n + 1$ selected numbers. A pigeon is assigned to the unique pigeon hole of which it is a member. By the Pigeonhole Principle, two pigeons must assigned to some hole, and these are the two consecutive numbers required. Notice that we’ve actually shown a bit more: there will be two consecutive numbers with the smaller being odd.
 \end{proof}
 
 \section{Problem 2}
+To ensure password security, a company requires their employees to choose a password. A length 10 word containing each of the characters:
+
+a, d, e, f, i, l, o, p, r, s,
+
+is called a cword. A password can be a cword which does not contain any of the subwords “fails”, “failed”, or “drop.”
+
+For example, the following two words are passwords: adefiloprs, srpolifeda,
+
+but the following three cwords are not: adropeflis, failedrops, dropefails.
+
 \subsection{(a)}
+How many cwords contain the subword “drop”?
 \begin{proof}
+Such cwords are obtainable by taking the word “drop” and the remaining 6 letters in any order. There are 7! permutations of these 7 items.
 \end{proof}
 
 \subsection{(b)}
+How many cwords contain both “drop” and “fails”?
 \begin{proof}
+Take the words “drop” and “fails” and the remaining letter “e” in any order. So there are 3! such cwords.
+\end{proof}
+
+\subsection{(c)}
+Use the Inclusion-Exclusion Principle to find a simple arithmetic formula involving factorials for the number of passwords.
+\begin{proof}
+There are 7! cwords that contain “drop”, 6! that contain “fails”, and 5! that contain “failed”. There are 3! cwords containing both “drop” and “fails”. No cword can contain both “fails” and “failed”. The cwords containing both “drop” and “failed” come from taking the subword “failedrop” and the remaining letter “s” in any order, so there are 2! of them. So by Inclusion-Exclusion, we have the number of cwords containing at least one of the three forbidden subwords is
+$$
+(7! + 6! + 5!) - (3! + 0 + 2!) + 0 = 5!(49) - 8.
+$$
+Among the 10! cwords, the remaining ones are passwords, so the number of passwords is
+$$
+10! - 7! - 6! - 5! + 3! + 2! = 3,622,928.
+$$
 \end{proof}
 
 \section{Problem 3}
-\subsection{(a)}
+How many paths are there from point $(0,0)$ to $(50,50)$ if each step along a path increments one coordinate and leaves the other unchanged? How many are there when there are impassable boulders sitting at points $(10,11)$ and $(21,20)$? (You do not have to calculate the number explicitly; your answer may be an expression
+involving binomial coefficients.)
+
+Hint: Inclusion-Exclusion.
 \begin{proof}
+Call the set of paths from point $(0,0)$ to $(50,50)$ $P$. 
+
+Any path in $P$ has 100 steps. Since we are moving strictly up/right, and we can only change one coordinate at a time, at each step we need to make a choice of whether we go up (modify the second coordinate), or we go right. Once 50 right steps have been chosen, the remaining 50 steps are forced to be up. So 
+$$
+|P| = \binom{100}{50}
+$$
+
+For the second question, first let's find: 
+
+paths from point $(0,0)$ to $(50,50)$ that go through $(10,11)$, call the set of these paths $P_1$; and 
+
+paths from point $(0,0)$ to $(50,50)$ that go through $(21,20)$, call the set of these paths $P_2$; 
+
+paths from point $(0,0)$ to $(50,50)$ that go through both $(10,11)$ and $(21,20)$: this is $P_1 \cap P_2$;
+
+then we can include/exclude them from all paths we found above.
+
+There is a bijection between $P_1$ and the pairs of paths from $(0,0)$ to $(10,11)$ and paths from $(10,11)$ to $(50,50)$. For the first path in a pair, there are 21 steps, 10 of which must be right steps. For the second path in a pair, there are 79 steps, 40 of which must be right steps. So
+$$
+|P_1| = \binom{21}{10} \cdot \binom{79}{40}
+$$
+
+Similarly, there is a bijection between $P_2$ and the pairs of paths from $(0,0)$ to $(21,20)$ and paths from $(21,20)$ to $(50,50)$. For the first path in a pair, there are 41 steps, 21 of which must be right steps. For the second path in a pair, there are 59 steps, 29 of which must be right steps. So
+$$
+|P_2| = \binom{41}{21} \cdot \binom{59}{29}
+$$
+
+Similarly, there is a bijection between $P_1 \cap P_2$ and triples of paths: 1) from $(0,0)$ to $(10,11)$, 2) from $(10, 11)$ to $(21,20)$, 3) from $(21,20)$ to $(50,50)$. So
+$$
+|P_1 \cap P_2| = \binom{21}{10} \cdot \binom{20}{11} \cdot \binom{59}{29}
+$$
+
+Now, by Inclusion-Exclusion, the number of paths from $(0,0)$ to $(50,50)$ that do not go through either of the points $(10,11)$ and $(21,20)$ is:
+$$
+|P| - |P_1| - |P_2| + |P_1\cap P_2| = \binom{100}{50} - \binom{21}{10} \cdot \binom{79}{40} - \binom{41}{21} \cdot \binom{59}{29} + \binom{21}{10} \cdot \binom{20}{11} \cdot \binom{59}{29}
+$$
+\end{proof}
+
+\section{Problem 4 (Supplemental Problem)}
+\subsection{(a)}
+Prove that every positive integer divides a number such as 70, 700, 7770, 77000, whose decimal representation consists of one or more 7’s followed by one or more 0’s.
+
+Hint: $7, 77, 777, 7777, \ldots$
+\begin{proof}
+???
 \end{proof}
 
 \subsection{(b)}
+Conclude that if a positive number is not divisible by 2 or 5, then it divides a number whose decimal representation is all 7’s.
 \begin{proof}
+1. Assume $n$ is a positive number not divisible by 2 or 5.
+
+2. By part (a) $n$ divides a number $s$ whose decimal representation consists of one or more 7's followed by one or more 0's.
+
+3. In particular, $s$ is divisible by 10 because its decimal representation contains at least one 0. 
+
+4. Let's write $s = s' \cdot (10)^k$ for some positive $k$ where $k$ is the highest power of 10 that divides $s$.
+
+5. By (4), $s'$ is a number whose decimal representation consists only of 7's.
+
+6. By (2) there exists $t$ such that $s = tn$.
+
+7. By (6) and (4) $s' \cdot (10)^k = tn$.
+
+8. By (7) and (1) $t$ is divisible by $(10)^k$. 
+
+9. By (8) there is some $t'$ such that $t = t' \cdot (10)^k$.
+
+10. By (9) and (7) $s' \cdot (10)^k = t'\cdot (10)^k \cdot n$, so $s' = t' n$.
+
+11. By (10) $n$ divides $s'$. Then the conclusion follows from (5).
 \end{proof}
 
-\section{Problem 4}
-\subsection{(a)}
+\section{Problem 5 (Supplemental Problem)}
+Show that for any set of 201 positive integers less than 300, there must be two whose quotient is a power of three (with no remainder).
 \begin{proof}
-\end{proof}
-
-\subsection{(b)}
-\begin{proof}
-\end{proof}
-
-\section{Problem 5}
-\subsection{(a)}
-\begin{proof}
-\end{proof}
-
-\subsection{(b)}
-\begin{proof}
+???
 \end{proof}
 \end{document}

@@ -6,57 +6,135 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{lemma}{Lemma}
+\newcommand{\dps}{\displaystyle}
 \hypersetup{colorlinks,allcolors=blue,linktoc=all}
 \geometry{a4paper} 
 \geometry{margin=0.5in}
-\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 12, Mon. (Session 28)''}
 \author{https://github.com/spamegg1}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Problem 1}
+[The Four-Door Deal]
+
+Let’s see what happens when Let’s Make a Deal is played with four doors. A prize is hidden behind one of the four doors. Then the contestant picks a door. Next, the host opens an unpicked door that has no prize behind it. The contestant is allowed to stick with their original door or to switch to one of the two unopened,
+unpicked doors. The contestant wins if their final choice is the door hiding the prize.
+
+Let’s make the same assumptions as in the original problem:
+
+1. The prize is equally likely to be behind each door.
+
+2. The contestant is equally likely to pick each door initially, regardless of the prize’s location.
+
+3. The host is equally likely to reveal each door that does not conceal the prize and was not selected by the player.
+
+Use The Four Step Method to find the following probabilities. The tree diagram may become awkwardly large, in which case just draw enough of it to make its structure clear. Also, indicate the set of outcomes in each of the events below. A numerical probability without a demonstration of the Method is not a satisfactory
+answer.
+
 \subsection{(a)}
+Contestant Stu, a sanitation engineer from Trenton, New Jersey, stays with his original door. What is the probability that Stu wins the prize?
 \begin{proof}
 \end{proof}
 
 \subsection{(b)}
+Contestant Zelda, an alien abduction researcher from Helena, Montana, switches to one of the remaining two doors with equal probability. What is the probability that Zelda wins the prize?
 \begin{proof}
 \end{proof}
 
 \section{Problem 2}
+Suppose there is a system, built by Caltech graduates, with $n$ components. We know from past experience that any particular component will fail in a given year with probability $p$. That is, letting $F_i$ be the event that the ith component fails within one year, we have $Pr[F_i] = p$ for $1 \leq i \leq n$.
+
+The system will fail if any one of its components fails. What can we say about the probability that the system will fail within one year?
+
+Let $F$ be the event that the system fails within one year. Without any additional assumptions, we can’t get an exact answer for $Pr[F]$. However, we can give useful upper and lower bounds, namely,
+$$
+p \leq Pr[F] \leq np \,\,\,\,\,\,\,\,\,(1)
+$$
+We may as well assume $p < 1/n$, since the upper bound is trivial otherwise. For example, if $n = 100$ and $p = 10^{-5}$, we conclude that there is at most one chance in 1000 of system failure within a year and at least one chance in 100,000.
+
+Let’s model this situation with the sample space $S \Coloneqq pow([1,n])$ whose outcomes are subsets of positive integers $n$, where $s \in S$ corresponds to the indices of exactly those components that fail within one year. For example, $\{2, 5\}$ is the outcome that the second and fifth components failed within a year and none of the other components failed. So the outcome that the system did not fail corresponds to the empty set, $\emptyset$.
+
 \subsection{(a)}
+Show that the probability that the system fails could be as small as $p$ by describing appropriate probabilities for the outcomes. Make sure to verify that the sum of your outcome probabilities is 1.
 \begin{proof}
 \end{proof}
 
 \subsection{(b)}
+Show that the probability that the system fails could actually be as large as $np$ by describing appropriate probabilities for the outcomes. Make sure to verify that the sum of your outcome probabilities is 1.
+\begin{proof}
+\end{proof}
+
+\subsection{(c)}
+Prove inequality (1).
 \begin{proof}
 \end{proof}
 
 \section{Problem 3}
-\subsection{(a)}
-\begin{proof}
-\end{proof}
+To determine which of two people gets a prize, a coin is flipped twice. If the flips are a Head and then a Tail, the first player wins. If the flips are a Tail and then a Head, the second player wins. However, if both coins land the same way, the flips don’t count and the whole process starts over.
 
-\subsection{(b)}
+Assume that on each flip, a Head comes up with probability $p$, regardless of what happened on other flips. Use the four step method to find a simple formula for the probability that the first player wins. What is the probability that neither player wins?
+
+Hint: The tree diagram and sample space are infinite, so you’re not going to finish drawing the tree. Try drawing only enough to see a pattern. Summing all the winning outcome probabilities directly is cumbersome. However, a neat trick solves this problem; and many others. Let $s$ be the sum of all winning outcome probabilities in the whole tree. Notice that you can write the sum of all the winning probabilities in certain subtrees as a function of $s$. Use this observation to write an equation in $s$ and then solve.
 \begin{proof}
 \end{proof}
 
 \section{Problem 4}
+Prove the following probabilistic inequality, referred to as the Union Bound. Let $A_1, \ldots, A_n, \ldots$ be events. Then
+$$
+Pr\left[\bigcup_{n \in \mathbb{N}}A_n\right] \leq \sum_{n \in \mathbb{N}}Pr[A_n]
+$$
+Hint: Replace the $A_n$’s by pairwise disjoint events and use the Sum Rule.
+\begin{proof}
+\end{proof}
+
+\section{Problem 5 (Supplemental Problem)}
+Here are some handy rules for reasoning about probabilities that all follow directly from the Disjoint Sum Rule. Prove them.
+
 \subsection{(a)}
+Pr[$A - B$] = Pr[$A$] $-$ Pr[$A \cap B$] (Difference Rule)
 \begin{proof}
 \end{proof}
 
 \subsection{(b)}
+Pr[$\overline{A}$] = 1 $-$ Pr[$A$] (Complement Rule)
 \begin{proof}
 \end{proof}
 
-\section{Problem 5}
+\subsection{(c)}
+Pr[$A \cup B$] = Pr[$A$] + Pr[$B$] $-$ Pr[$A \cap B$] (Inclusion-Exclusion)
+\begin{proof}
+\end{proof}
+
+\subsection{(d)}
+Pr[$A \cup B$] $\leq$ Pr[$A$] + Pr[$B$] (2-event Union Bound)
+\begin{proof}
+\end{proof}
+
+\subsection{(e)}
+If $A \subseteq B$ then Pr[$A$] $\leq$ Pr[$B$] (Monotonicity)
+\begin{proof}
+\end{proof}
+
+\section{Problem 6 (Supplemental Problem)}
+The New York Yankees and the Boston Red Sox are playing a two-out-of-three series. In other words, they play until one team has won two games. Then that team is declared the overall winner and the series ends. Assume that the Red Sox win each game with probability 3/5, regardless of the outcomes of previous games.
+
+Answer the questions below using the four step method. You can use the same tree diagram for all three problems.
+
 \subsection{(a)}
+What is the probability that a total of 3 games are played?
 \begin{proof}
 \end{proof}
 
 \subsection{(b)}
+What is the probability that the winner of the series loses the first game?
 \begin{proof}
 \end{proof}
+
+\subsection{(c)}
+What is the probability that the correct team wins the series?
+\begin{proof}
+\end{proof}
+
 \end{document}
