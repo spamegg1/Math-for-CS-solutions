@@ -6,57 +6,315 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{claim}{Claim}
 \newtheorem{lemma}{Lemma}
+\newcommand{\dps}{\displaystyle}
 \hypersetup{colorlinks,allcolors=blue,linktoc=all}
 \geometry{a4paper} 
 \geometry{margin=0.5in}
-\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 2, Fri. (Session 4)''}
+\title{Math for CS 2015/2019 solutions to ``In-Class Problems Week 13, Fri. (Session 33)''}
 \author{https://github.com/spamegg1}
 \begin{document}
 \maketitle
 \tableofcontents
 
 \section{Problem 1}
+A herd of cows is stricken by an outbreak of cold cow disease. The disease lowers a cow’s body temperature from normal levels, and a cow will die if its temperature goes below 90 degrees F. The disease epidemic is so intense that it lowered the average temperature of the herd to 85 degrees. Body temperatures as low as 70 degrees, but no lower, were actually found in the herd.
+
 \subsection{(a)}
+Use Markov’s Bound to prove that at most 3/4 of the cows could survive.
+
 \begin{proof}
+Let $T$ be the temperature of a random cow. Then the fraction of cows that survive is the probability that $T \geq 90$, and E$[T]$ is the average temperature of the herd.
+
+Applying Markov’s Bound to $T$:
+$$
+Pr[T \geq 90] \leq \frac{E[T]}{90} = \frac{85}{90} = \frac{17}{18}
+$$
+But $17/18 > 3/4$, so this bound is not good enough.
+
+Instead, we apply Markov’s Bound to $T - 70$:
+$$
+Pr[T \geq 90] = Pr[T - 70 \geq 20] \leq \frac{E[T - 70]}{20} = \frac{85 - 70}{20} = 3/4
+$$
 \end{proof}
 
 \subsection{(b)}
+Suppose there are 400 cows in the herd. Show that the bound from part (a) is the best possible by giving an example set of temperatures for the cows so that the average herd temperature is 85 and 3/4 of the cows will have a high enough temperature to survive.
+
 \begin{proof}
+Let 100 cows have temperature 70 degrees and 300 have 90 degrees. So the probability that a random cow has a high enough temperature to survive is exactly 3/4. Also, the mean temperature is (1/4)70 + (3/4)90 = 85. So this distribution of temperatures satisfies the conditions under which the Markov bound im­plies that the probability of having a high enough temperature to survive cannot be larger than 3/4.
+\end{proof}
+
+\subsection{(c)}
+Notice that the results of part (b) are purely arithmetic facts about averages, not about probabilities. But you verified the claim in part (a) by applying Markov’s bound on the deviation of a random variable. Justify this approach by regarding the temperature, $T$, of a cow as a random variable. Carefully specify the probability space on which $T$ is defined: what are the outcomes? what are their probabilities? Explain the precise connection between properties of $T$ and average herd temperature that justifies the application of Markov’s Bound.
+\begin{proof}
+???
 \end{proof}
 
 \section{Problem 2}
+A gambler plays 120 hands of draw poker, 60 hands of black jack, and 20 hands of stud poker per day. He wins a hand of draw poker with probability 1/6, a hand of black jack with probability 1/2, and a hand of stud poker with probability 1/5.
+
 \subsection{(a)}
+What is the expected number of hands the gambler wins in a day?
+
 \begin{proof}
+120(1/6) + 60(1/2) + 20(1/5) = 54.
 \end{proof}
 
 \subsection{(b)}
+What would the Markov bound be on the probability that the gambler will win at least 108 hands on a given day?
+
 \begin{proof}
+The expected number of games won is 54, so by Markov, Pr$[R \geq 108] \leq 54/108 = 1/2$.
+\end{proof}
+
+\subsection{(c)}
+Assume that the outcomes of the card games are pairwise, but possibly not mutually, independent. What is the variance of the number of hands won per day? You may answer with a numerical expression that is not completely evaluated.
+
+\begin{proof}
+The variance can also be calculated using linearity of variance. For an individual hand the variance is $p(1 - p)$ where $p$ is the probability of winning. Therefore the variance is 120(1/6)(5/6) + 60(1/2)(1/2) + 20(1/5)(4/5) = 523/15.
+\end{proof}
+
+\subsection{(d)}
+What would the Chebyshev bound be on the probability that the gambler will win at least 108 hands on a given day? You may answer with a numerical expression that is not completely evaluated.
+
+\begin{proof}
+$$
+Pr[R - 54 \geq 54] \leq Pr[|R - 54| \geq 54] \leq \frac{Var[R]}{54^2} = \frac{523}{(15)(54)^2}
+$$
 \end{proof}
 
 \section{Problem 3}
+The hat-check staff has had a long day serving at a party, and at the end of the party they simply return the $n$ checked hats in a random way such that the probability that any particular person gets their own hat back is $1/n$.
+
+Let $X_i$ be the indicator variable for the $i$th person getting their own hat back. Let $S_n$ be the total number of people who get their own hat back.
+
 \subsection{(a)}
+What is the expected number of people who get their own hat back?
 \begin{proof}
+Pr$[X_i = 1] = 1/n$, so by the linearity of expectation 
+$$
+Ex[S_n] = Ex[X_1 + \ldots + X_n] = Ex[X_1] + \ldots + Ex[X_n] = n \cdot \frac{1}{n} = 1
+$$
 \end{proof}
 
 \subsection{(b)}
+Write a simple formula for Ex$[X_i \cdot X_j]$ for $i \neq j$.
+
+Hint: What is Pr$[X_j = 1 \,|\, X_i = 1]$?
+
 \begin{proof}
+The probability that $X_i$ and $X_j$ are both 1 is $\frac{1}{n} \cdot\frac{1}{n-1}$. Thus $X_i \cdot X_j = 1$ with probability $\frac{1}{n(n-1)}$ and 0 otherwise. So Ex$[X_i \cdot X_j] = \frac{1}{n(n-1)}$.
 \end{proof}
 
-\section{Problem 4}
-\subsection{(a)}
+\subsection{(c)}
+Explain why you cannot use the variance of sums formula to calculate Var$[S_n]$.
 \begin{proof}
+The indicator random variables, $X_i$, are not even pairwise independent. This can be seen by comparing the marginal and conditional probability of a particular person, Alice, getting her hat back. The marginal probability, unconditioned on any other events, is $1/n$ as we’ve computed before. However, if compute this probability conditioned on the event that a second person, Bob, got his hat back, we find that the probability of Alice getting her hat back is $1/(n - 1)$.
+\end{proof}
+
+\subsection{(d)}
+Show that Ex$[(S_n)^2] = 2$. Hint: $(X_i)^2 = X_i$.
+
+\begin{proof}
+$$
+\begin{array}{rcl}
+\dps Ex[(S_n)^2] & = & \dps  \sum_{i = 1}^n Ex[(X_i)^2] + \sum_{i = 1}^n \sum_{j \neq i} Ex[X_i \cdot X_j]\\
+& = & \dps n \cdot \frac{1}{n} + n(n-1) \cdot \frac{1}{n(n-1)}\\
+& = & 2\\
+\end{array}
+$$
+\end{proof}
+
+\subsection{(e)}
+What is the variance of $S_n$?
+
+\begin{proof}
+$$
+\begin{array}{rcl}
+Var[S_n] & = & Ex[(S_n)^2] - (Ex[S_n])^2\\
+& = & 2 - (n \cdot (1/n))^2\\
+& = & 1\\
+\end{array}
+$$
+\end{proof}
+
+\subsection{(f)}
+Show that there is at most a 1\% chance that more than 10 people get their own hat back.
+
+\begin{proof}
+$$
+\begin{array}{rcl}
+Pr[S_n \geq 11] & = & Pr[S_n - Ex[S_n] \geq 11 - Ex[S_n]]\\
+& = & Pr[S_n - Ex[S_n] \geq 10]\\
+& = & \dps \frac{Var[S_n]}{10^2} = 0.01\\
+\end{array}
+$$
+Note that the $X_i$’s are Bernoulli variables but are not independent, so $S_n$ does not have a binomial distribution and the binomial estimates from Lecture Notes do not apply.
+\end{proof}
+
+\section{Problem 4 (Supplementary Problem)}
+Let $K_n$ be the complete graph with $n$ vertices. Each of the edges of the graph will be randomly assigned one of the colors red, green, or blue. The assignments of colors to edges are mutually independent, and the probability of an edge being assigned red is $r$, blue is $b$, and green is $g$ (so $r + b + g = 1$).
+
+A set of three vertices in the graph is called a triangle. A triangle is monochromatic if the three edges connecting the vertices are all the same color.
+
+\subsection{(a)}
+Let $m$ be the probability that any given triangle, $T$, is monochromatic. Write a simple formula for $m$ in terms of $r, b$, and $g$.
+
+\begin{proof}
+$m = r^3 + b^3 + g^3$
 \end{proof}
 
 \subsection{(b)}
+Let $I_T$ be the indicator variable for whether $T$ is monochromatic. Write simple formulas in terms of $m, r, b,$ and $g$ for Ex$[I_T]$ and Var$[I_T]$.
+
 \begin{proof}
+Ex$[I_T]$ = Pr[$T$ is monochromatic] $= m$
+
+Var$[I_T] = $ Ex$[(I_T)^2] - $(Ex$[I_T])^2 =$ Ex$[I_T] - $ (Ex$[I_T])^2 = m - m^2$
 \end{proof}
 
-\section{Problem 5}
-\subsection{(a)}
+Let $T$ and $U$ be distinct triangles.
+
+\subsection{(c)}
+What is the probability that $T$ and $U$ are both monochromatic if they do not share an edge? . . . if they do share an edge?
 \begin{proof}
+If $T$ and $U$ do not share an edge, $T$ being monochromatic is independent of $U$ being monochromatic. Therefore
+
+Pr[$T$ and $U$ are both monoch.] $=$ Pr[$T$ is monoch.] $\cdot$ Pr[$U$ is monoch.] $ = m^2$
+
+If they share an edge, there are 3 possibilities. Either they share 1 edge, or 2 edges, or 3 edges (which is impossible because $T$ and $U$ are distinct triangles).
+
+Assume they share one edge $e$.
+
+If $e$ has color red, then the probability that the other two edges of $T$ are also red is $r^2$; and the probability that the other two edges of $U$ are also red is $r^2$. Notice these two events are independent (the other two edges are not common to $T$ and $U$).
+
+Pr[$T$ and $U$ are both monoch. $|$ $e$ has color red] $ = r^4$.
+
+Similar arguments for the other two color cases for $e$. Therefore
+
+Pr[$T$ and $U$ are both monoch $|$ $T$ and $U$ have only one edge $e$ in common] $=$ 
+
+Pr[$e$ has color red] $\cdot$ Pr[$T$ and $U$ are both monoch. $|$ $e$ has color red]
+
++ Pr[$e$ has color blue] $\cdot$ Pr[$T$ and $U$ are both monoch. $|$ $e$ has color blue]
+
++ Pr[$e$ has color green] $\cdot$ Pr[$T$ and $U$ are both monoch. $|$ $e$ has color green]
+
+$= r \cdot r^4 + b \cdot b^4 + g \cdot g^4 = r^5 + b^5 + g^5$.
+
+We can give a similar analysis when $T$ and $U$ have two edges in common, say $e,f$. Now there are 9 possibilities for the colors of $e,f$.
+
+Pr[$e$ and $f$ are both red] $ = r^2$, and the probability that the remaining third edge of $T$ is also red is $r$, and the probability that the remaining third edge of $U$ is also red is $r$ (and these two events are independent).
+
+And so on. With this analysis we see that 
+
+Pr[$T$ and $U$ are both monoch. $|$ $T$ and $U$ have 2 edges in common] $ = r^4 + b^4 + g^4$.
+\end{proof}
+
+\begin{center}
+{\bf Now assume $r = b = g = 1/3$.}
+\end{center}
+
+\subsection{(d)}
+Show that $I_T$ and $I_U$ are independent random variables.
+\begin{proof}
+Need to show that the events:
+
+1. $[I_T = 0]$ and $[I_U = 0]$ are independent,
+
+2. $[I_T = 0]$ and $[I_U = 1]$ are independent,
+
+3. $[I_T = 1]$ and $[I_U = 0]$ are independent,
+
+4. $[I_T = 1]$ and $[I_U = 1]$ are independent.
+
+We will only show (2), the others are similar.
+
+For (2) we need to show that Pr[$(I_T = 0) \cap (I_U = 1)] = $ Pr$[I_T = 0] \cdot$ Pr$[I_U = 1]$.
+
+Consider the event $(I_T = 0) \cap (I_U = 1)$. This is the event [$T$ is not monoch. AND $U$ is monoch.] There are 4 cases for this event: $T$ and $U$ have 0,1,2,3 edges in common (the last one is impossible since $T$ and $U$ are distinct triangles).
+
+If $T$ and $U$ have 0 edges in common, then the event [$T$ is not monoch.] and the event [$U$ is monoch] are independent. So we have Pr[$(I_T = 0) \cap (I_U = 1)] = $ Pr$[I_T = 0] \cdot$ Pr$[I_U = 1]$ as needed.
+
+If $T$ and $U$ have 1 edge in common, say $e$, consider 3 cases for $e$: red, blue, green. Consider the red case. Pr[the other two edges of $T$ are not both red] is $1-r^2$. Pr[the other two edges of $U$ are both red] is $r^2$. These two events (about the other two edges) are independent, so in this case Pr[$(I_T = 0) \cap (I_U = 1)] = (1-r^2)r^2$. Similar for the other two colors. So
+
+Pr[$(I_T = 0) \cap (I_U = 1)] = r \cdot (1-r^2)r^2 + b \cdot (1-b^2)b^2 + g \cdot (1-g^2)g^2$.
+
+Plugging-in $r = b = g = 1/3$ we get Pr[$(I_T = 0) \cap (I_U = 1)] = \frac{24}{243} = \frac{8}{81}$.
+
+Now Pr$[I_T = 0] = r \cdot(1-r^2) + b \cdot(1-b^2) + g \cdot(1-g^2) = \frac{24}{27} = \frac{8}{9}$ and Pr$[I_U = 1] = r\cdot r^2 + b\cdot b^2 + g\cdot g^2 = \frac{3}{27} = \frac{1}{9}$ so Pr$[I_T = 0] \cdot$ Pr$[I_U = 1] = \frac{8}{81}$.
+
+So Pr[$(I_T = 0) \cap (I_U = 1)] = $ Pr$[I_T = 0] \cdot$ Pr$[I_U = 1]$ as needed.
+
+Finally the case where $T$ and $U$ have 2 edges $e,f$ in common follows from a similar argument.
+
+So $[I_T = 0]$ and $[I_U = 1]$ are independent, which proves (2). 
+\end{proof}
+
+\subsection{(e)}
+Let $M$ be the number of monochromatic triangles. Write simple formulas in terms of $n$ and $m$ for Ex$[M]$ and Var$[M]$.
+
+\begin{proof}
+First of all, how many triangles are there in $K_n$? Since it's a complete graph, every set of three vertices form a triangle. So there are $\binom{n}{3}$ triangles.
+
+The probability that any given triangle $T$ is monochromatic is $m$ by part (a).
+
+Therefore Ex$[M] = \binom{n}{3}m$. (Similarly Ex$[M^2] = \binom{n}{3}^2 m$.)
+
+Var$[M] = $ Ex$[M^2] - $(Ex$\dps [M])^2 = \binom{n}{3}^2 m - (\binom{n}{3} m)^2 = \binom{n}{3}^2(m - m^2)$.
+\end{proof}
+
+\subsection{(f)}
+Let $\mu \Coloneqq Ex[M]$. Use Chebyshev’s Bound to prove that
+$$
+Pr[|M - \mu| > \sqrt{\mu \log(\mu)}] \leq \frac{1}{\log(\mu)}
+$$
+
+\begin{proof}
+By Chebyshev's Bound
+$$
+Pr[|M - \mu| > \sqrt{\mu \log(\mu)}] \leq \frac{Var[M]}{\mu \log(\mu)}
+$$
+So we need to show Var$[M] \leq \mu$, in other words Var$[M] \leq$ Ex$[M]$.
+
+???
+\end{proof}
+
+\subsection{(g)}
+Conclude that
+$$
+\lim_{n \to \infty} Pr[|M - \mu| > \sqrt{\mu \log(\mu)}] = 0
+$$
+\begin{proof}
+$\log(\mu) = \log(\binom{n}{3}m) = \log(n(n-1)(n-2)m / 6)$, so
+$$
+\lim_{n \to \infty} Pr[|M - \mu| > \sqrt{\mu \log(\mu)}] \leq \lim_{n \to \infty} \frac{1}{\log(n(n-1)(n-2)m / 6)} = 0
+$$
+therefore $\dps\lim_{n \to \infty} Pr[|M - \mu| > \sqrt{\mu \log(\mu)}] = 0$.
+\end{proof}
+
+\section{Problem 5 (Supplementary Problem)}
+Let $R$ be a positive integer valued random variable.
+
+\subsection{(a)}
+If Ex$[R] = 2$, how large can Var$[R]$ be?
+
+\begin{proof}
+???
 \end{proof}
 
 \subsection{(b)}
+How large can Ex$[1/R]$ be?
+
 \begin{proof}
+???
 \end{proof}
+
+\subsection{(c)}
+If $R \leq 2$, that is, the only values of $R$ are 1 and 2, how large can Var$[R]$ be?
+
+\begin{proof}
+???
+\end{proof}
+
 \end{document}
