@@ -113,11 +113,17 @@ where into$(w) \Coloneqq \{v\,\, | \,\,\langle v \to w\rangle \text{ is an edge}
 \begin{proof}
 1. Assume $G$ is a finite random walk graph with vertex set $V = \{v_1, \ldots, v_n\}$.
 
-2. Assume the uniform distribution Pr[at $v_i] = \frac{1}{n}$ on $G$ is stationary. Want to prove $\dps\sum_{u \in \text{into}(v_i)} p(u,v_i) = 1$ for all $1 \leq i \leq n$.
+2. Assume the uniform distribution Pr[at $v_i] = \frac{1}{n}$ on $G$ is stationary. 
 
-3. Since the distribution is stationary, Pr[at $v_i$] = Pr[go to $v_i$ at next step]. So by (2) we have $\frac{1}{n}$ = Pr[go to $v_i$ at next step].
+Want to prove $\dps\sum_{u \in \text{into}(v_i)} p(u,v_i) = 1$ for all $1 \leq i \leq n$.
 
-4. Notice that by definition, Pr[go to $v_i$ at next step] = $\dps\sum_{u \in \text{into}(v_i)} (p(u,v_i) \cdot Pr[\text{at } u])$. So we have $\dps\frac{1}{n} = \sum_{u \in \text{into}(v_i)} (p(u,v_i) \cdot Pr[\text{at } u])$ by (3).
+3. Since the distribution is stationary, Pr[at $v_i$] = Pr[go to $v_i$ at next step]. 
+
+So by (2) we have $\frac{1}{n}$ = Pr[go to $v_i$ at next step].
+
+4. Notice that by definition, Pr[go to $v_i$ at next step] = $\dps\sum_{u \in \text{into}(v_i)} (p(u,v_i) \cdot Pr[\text{at } u])$. 
+
+So we have $\dps\frac{1}{n} = \sum_{u \in \text{into}(v_i)} (p(u,v_i) \cdot Pr[\text{at } u])$ by (3).
 
 5. Again, since the distribution is stationary, Pr[at $u$] = $\frac{1}{n}$ for all $u \in \text{into}(v_i)$ and all $1 \leq i \leq n$.
 
@@ -125,7 +131,11 @@ where into$(w) \Coloneqq \{v\,\, | \,\,\langle v \to w\rangle \text{ is an edge}
 
 7. Cancelling $1/n$ we get $\dps\sum_{u \in \text{into}(v_i)} p(u,v_i) = 1$.
 
-8. Conversely, assume $\dps\sum_{u \in \text{into}(v_i)} p(u,v_i) = 1$ for all $1 \leq i \leq n$. Want to prove that the uniform distribution Pr[at $v_i] = \frac{1}{n}$ on $G$ is stationary. The proof is very similar to the above steps.
+8. Conversely, assume $\dps\sum_{u \in \text{into}(v_i)} p(u,v_i) = 1$ for all $1 \leq i \leq n$. 
+
+Want to prove that the uniform distribution Pr[at $v_i] = \frac{1}{n}$ on $G$ is stationary. 
+
+The proof is very similar to the above steps.
 \end{proof}
 
 \section{Problem 3}
