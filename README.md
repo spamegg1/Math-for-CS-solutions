@@ -4,7 +4,7 @@
 
 Solutions to Problem Sets and Exams of MIT Mathematics for Computer Science 2015 (same as [2019 Open Learning Library](https://openlearninglibrary.mit.edu/courses/course-v1:OCW+6.042J+2T2019/))
 
-Contact me: `spamegg#3510` on Discord, or [on Slack](https://join.slack.com/t/spamegg/shared_invite/zt-1vhzofzrl-ucBjeQEQkl9Ol3wpvL9VPw)
+Contact me: `spamegg#3510` on Discord, or [on Slack](https://join.slack.com/t/spamegg/shared_invite/zt-1vhzofzrl-ucBjeQEQkl9Ol3wpvL9VPw), or [on Matrix](https://matrix.to/#/!GQFJgtvxFByBVixTAi:matrix.org?via=matrix.org)
 
 Shield: [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
 
