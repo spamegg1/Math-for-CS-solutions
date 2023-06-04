@@ -1,6 +1,8 @@
 > ***It soon became clear that the unconscious instincts for logic and language which had enabled me to succeed were not shared by the large majority of my students.*** - Susanna Epp (author of [Discrete Mathematics with Applications, 5th edition](https://www.amazon.com/Discrete-Mathematics-Applications-Susanna-Epp-ebook/dp/B07M87BWRC))
 
-**Please note that the above book by Epp is much better suited for beginners, whereas MIT Math for CS is much more difficult.**
+**Please note that the above book by Epp is much better suited for beginners, whereas MIT Math for CS is much more difficult.** (Solutions to that one are [here](https://github.com/spamegg1/Epp-Discrete-Math-5th-solutions).)
+
+**Feel free to [open a discussion](https://github.com/spamegg1/Math-for-CS-solutions/discussions) if you find a mistake or a typo!**
 
 Solutions to Problem Sets and Exams of MIT Mathematics for Computer Science 2015 (same as [2019 Open Learning Library](https://openlearninglibrary.mit.edu/courses/course-v1:OCW+6.042J+2T2019/))
 
