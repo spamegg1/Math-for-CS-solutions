@@ -249,7 +249,18 @@ So it proves (12) $ \implies $ (13) $ \implies $ (14) $ \implies $ (15) $ \impli
 
 All the statements \textit{happen to be true} in this case, but this is not shown by the implications in this bogus proof (because we don't know if the initial assumption in (12) is true or not). Remember from before, that if you start from a false assumption, such as $1 = -1$, then you can ``prove'' pretty much anything (like $2 = 1$).
 
-But if we prove all the implications in reverse, the proof is correct! We can start with the true statement (16). Then apply correct steps going backwards. Then we reach (12), which then must also be true.
+We can make a correct proof by contradiction. Start by assuming the intended proposition is false and see if we can reach a contradiction, thereby proving the proposition true.
+
+{\it Corrected proof.}
+\begin{align}
+  \frac{a+b}{2} &< \sqrt{ab} &\text{(original proposition negated)} \\
+a+b &< 2\sqrt{ab} \\
+a^2+2ab+b^2 &< 4ab\\
+a^2-2ab+b^2 &< 0\\
+  (a-b)^2 &< 0 &\text{(false since any squared value is non-negative)}
+\end{align}
+
+This proves the assumption $\frac{a+b}{2} < \sqrt{ab}$ is false, so its negation $\frac{a+b}{2} \geq \sqrt{ab}$ must be true.
 
 There is a bit of an issue that we need to be careful with: proving the implication (14) $\implies$ (13) involves taking square roots of both sides. We have to know that both $a^2 + 2ab + b^2$ and $4ab$ are nonnegative (can't take square root of a negative number), and we also have to use the Calculus fact that the square root function is increasing (so that the inequality $\geq$ is preserved after taking square roots).
 \end{proof}
